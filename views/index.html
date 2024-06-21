@@ -1,0 +1,29 @@
+{{block "index" .}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tgrangeo</title>
+  </head>
+  <body style="margin: 0; background-color: whitesmoke;">
+    <div id="header" style="border-bottom: 1px black solid">
+      <h1>TGRANGEO</h1>
+    </div>
+    <div id="github-readme">
+      <div
+        id="readme-content"
+        style="
+			margin: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 60vw;
+        "
+      >
+        {{.Readme}}
+      </div>
+    </div>
+  </body>
+</html>
+{{end}}
