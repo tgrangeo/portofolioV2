@@ -5,25 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tgrangeo</title>
+    <link rel="stylesheet" href="../static/styles.css" />
   </head>
-  <body style="margin: 0; background-color: whitesmoke;">
-    <div id="header" style="border-bottom: 1px black solid">
+  <body>
+    <div id="header" class="header">
       <h1>TGRANGEO</h1>
-    </div>
-    <div id="github-readme">
-      <div
-        id="readme-content"
-        style="
-			margin: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 60vw;
-        "
-      >
-        {{.Readme}}
+      <div>
+        <!-- TODO: a beurk beurk mettre des hxget qui modifie uniquement la div content :) -->
+        <a href="/"> Home </a>
+        <a href="/projects"> Project </a>
       </div>
     </div>
+    <div class="content">{{.Readme}}</div>
   </body>
 </html>
 {{end}}

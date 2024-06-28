@@ -1,0 +1,18 @@
+{{block "projects" .}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tgrangeo</title>
+  </head>
+  <body style="margin: 0; background-color: red">
+    <div id="header" style="border-bottom: 1px black solid">
+      <h1>Projects</h1>
+    </div>
+    <div id="github-readme">
+      <div id="readme-content">{{.Readme}}</div>
+    </div>
+  </body>
+</html>
+{{end}}
