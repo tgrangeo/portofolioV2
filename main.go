@@ -3,39 +3,53 @@ package main
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"html/template"
-
-	// "io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
+	"github.com/joho/godotenv"
 )
 
 type GitHubFileContent struct {
 	Content string `json:"content"`
 }
 
-func fetchRepoReadme(username string,repo string) (string, error) {
-	url := "https://api.github.com/repos/" + username + "/" + repo + "/contents" + "/README.md"
-	log.Println(url)
-	resp, err := http.Get(url)
+func fetchRepoReadme(username string, repo string) (string, error) {
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/README.md", username, repo)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error creating request: %w", err)
+	}
+
+	token := os.Getenv("GITHUB_TOKEN")
+	if token != "" {
+		req.Header.Set("Authorization", "token "+token)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error fetching repo README: %w", err)
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to fetch repo README: %s", resp.Status)
+	}
 
 	var fileContent GitHubFileContent
 	if err := json.NewDecoder(resp.Body).Decode(&fileContent); err != nil {
-		return "", err
+		return "", fmt.Errorf("error decoding repo README: %w", err)
 	}
 
 	decodedContent, err := base64.StdEncoding.DecodeString(fileContent.Content)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error decoding base64 content: %w", err)
 	}
 
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
@@ -50,22 +64,36 @@ func fetchRepoReadme(username string,repo string) (string, error) {
 }
 
 func fetchUserReadme(username string) (string, error) {
-	url := "https://api.github.com/repos/" + username + "/" + username + "/readme"
-	log.Println(url)
-	resp, err := http.Get(url)
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/readme", username, username)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error creating request: %w", err)
+	}
+
+	token := os.Getenv("GITHUB_TOKEN")
+	if token != "" {
+		req.Header.Set("Authorization", "token "+token)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error fetching user README: %w", err)
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to fetch user README: %s", resp.Status)
+	}
+
 	var fileContent GitHubFileContent
 	if err := json.NewDecoder(resp.Body).Decode(&fileContent); err != nil {
-		return "", err
+		return "", fmt.Errorf("error decoding user README: %w", err)
 	}
 
 	decodedContent, err := base64.StdEncoding.DecodeString(fileContent.Content)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error decoding base64 content: %w", err)
 	}
 
 	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
@@ -81,49 +109,43 @@ func fetchUserReadme(username string) (string, error) {
 
 var tmpl *template.Template
 
-func ShowHomePage(w http.ResponseWriter, r *http.Request) {
-	// readme, _ := fetchUserReadme("tgrangeo")
+func ShowAbout(w http.ResponseWriter, r *http.Request) {
 	readme, err := fetchUserReadme("tgrangeo")
-	//TODO: error handling here
 	if err != nil {
-		log.Fatalln(err)
-		// return tmpl.HTML(http.StatusInternalServerError, fmt.Sprintf("Error fetching README: %v", err))
+		log.Printf("Error fetching user README: %v", err)
+		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
+		return
 	}
-	data := map[string]interface{}{
-		"Readme": template.HTML(readme),
-	}
-
-	tmpl.ExecuteTemplate(w, "index.html", data)
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(readme))
 }
 
-func ShowProjectPage(w http.ResponseWriter, r *http.Request) {
+func ShowProject(w http.ResponseWriter, r *http.Request) {
 	readme, err := fetchRepoReadme("tgrangeo", "meteor")
-	log.Println(readme)
-	//TODO: error handling here
 	if err != nil {
-		log.Fatalln(err)
-		// return tmpl.HTML(http.StatusInternalServerError, fmt.Sprintf("Error fetching README: %v", err))
+		log.Printf("Error fetching repo README: %v", err)
+		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
+		return
 	}
-	data := map[string]interface{}{
-		"Readme": template.HTML(readme),
-	}
-
-	tmpl.ExecuteTemplate(w, "index.html", data)
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(readme))
 }
 
 func init() {
-	if tmpl == nil {
-		if tmpl == nil {
-			tmpl = template.Must(tmpl.ParseGlob("views/*.html"))
-			template.Must(tmpl.ParseGlob("views/*.html"))
-		}
+	err := godotenv.Load()
+	if err != nil {
+		log.Printf("Error loading .env file: %v", err)
 	}
+
+	tmpl = template.Must(template.ParseGlob("views/*.html"))
 }
 
 func main() {
-	http.HandleFunc("/", ShowHomePage)
-	http.HandleFunc("/projects", ShowProjectPage)
-
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl.ExecuteTemplate(w, "index.html", nil)
+	})
+	http.HandleFunc("/projects", ShowProject)
+	http.HandleFunc("/about", ShowAbout)
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

@@ -1,4 +1,3 @@
-{{block "index" .}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,17 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tgrangeo</title>
     <link rel="stylesheet" href="../static/styles.css" />
+    <script
+      src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js"
+      integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div id="header" class="header">
       <h1>TGRANGEO</h1>
       <div>
-        <!-- TODO: a beurk beurk mettre des hxget qui modifie uniquement la div content :) -->
-        <a href="/"> Home </a>
-        <a href="/projects"> Project </a>
+        <button hx-get="/about" hx-swap="innerHTML" hx-target="#content">
+          about
+        </button>
+        <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
+          projects
+        </button>
       </div>
     </div>
-    <div class="content">{{.Readme}}</div>
+    <div
+      id="content"
+      class="content"
+      hx-get="/about"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+    >
+      {{.Readme}}
+    </div>
   </body>
 </html>
-{{end}}
