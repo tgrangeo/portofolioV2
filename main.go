@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -39,7 +39,7 @@ func getRepos(user string) ([]string, error) {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
@@ -49,7 +49,7 @@ func getRepos(user string) ([]string, error) {
 	}
 	err = json.Unmarshal(body, &repos)
 	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling response: %w", err)
+		return nil, fmt.Errorf("error unmarshalled response: %w", err)
 	}
 
 	var repoNames []string
@@ -171,11 +171,15 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 
 	// Generate HTML for each repo
 	var builder strings.Builder
-	builder.WriteString("<ul>")
-	for i, repo := range repos {
-		builder.WriteString(fmt.Sprintf("<li>%d <button hx-get=\"/readme/%s\">%s<button></li>", i, repo, repo))
+	builder.WriteString("<div class=\"projects\">")
+	builder.WriteString("<div class=\"side\"><ul>")
+	for _, repo := range repos {
+		builder.WriteString(fmt.Sprintf("<li><button hx-get=\"/readme/%s\" hx-target=\"#project-readme\" hx-swap=\"innerHTML\">%s</button></li>", repo, repo))
 	}
-	builder.WriteString("</ul>")
+	builder.WriteString("</ul></div>")
+	builder.WriteString("<div id=\"project-readme\"></div>")
+	builder.WriteString("</div>")
+
 
 	// Write HTML to response
 	w.Header().Set("Content-Type", "text/html")
@@ -217,7 +221,7 @@ func main() {
 	})
 	http.HandleFunc("/projects", ShowProjects)
 	http.HandleFunc("/about", ShowAbout)
-	http.HandleFunc("/readme/", ShowProjectReadme) // Changed to handle parameter
+	http.HandleFunc("/readme/", ShowProjectReadme)
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
