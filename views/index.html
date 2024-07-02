@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-theme">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tgrangeo</title>
     <link rel="stylesheet" href="../static/styles.css" />
+    <!-- font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- htmx -->
     <script
       src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js"
       integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
@@ -13,15 +19,21 @@
   </head>
   <body>
     <div id="header" class="header">
-      <h1>TGRANGEO</h1>
-      <div>
+      <h1 class="title">TGRANGEO</h1>
+      <div class="menu">
         <button hx-get="/about" hx-swap="innerHTML" hx-target="#content">
-          about
+          About
         </button>
         <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
-          projects
+          Projects
+        </button>
+        <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
+          Contact
         </button>
       </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon" id="theme-icon">🌞</span>
+      </button>
     </div>
     <div
       id="content"
@@ -32,5 +44,13 @@
     >
       {{.Readme}}
     </div>
+    <script>
+      const toggleTheme = () => {
+        const html = document.querySelector("html");
+        html.classList.toggle("dark-theme");
+        html.classList.toggle("light-theme");
+        document.querySelector("theme-icon").textContent = "🌙";
+      };
+    </script>
   </body>
 </html>

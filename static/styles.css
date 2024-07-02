@@ -1,6 +1,36 @@
+/* Theme variables */
+:root {
+  --light-background-color: whitesmoke;
+  --light-text-color: #181818;
+  --light-color: #181818;
+
+  --dark-background-color: #181818;
+  --dark-text-color: #eee;
+  --dark-color: #eee;
+}
+
+/* Default to Light Theme */
+html.light-theme {
+  --background-color: var(--light-background-color);
+  --text-color: var(--light-text-color);
+  --color: var(--light-color);
+}
+
+/* Dark Theme */
+html.dark-theme {
+  --background-color: var(--dark-background-color);
+  --text-color: var(--dark-text-color);
+  --color: var(--dark-color);
+}
+
 body {
   margin: 0;
-  background-color: whitesmoke;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
 }
 
 img {
@@ -8,12 +38,27 @@ img {
   height: auto;
 }
 
+.title {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .header {
-  border-bottom: 1px black solid;
+  /* border-bottom: 1px solid var(--color); */
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: 2vh;
+}
+
+.header * {
+  margin-right: 1vw;
+}
+
+.header button {
+  font-size: 22px;
 }
 
 .content {
@@ -34,24 +79,31 @@ img {
 
 .side {
   width: 20vw;
+}
 
-  button {
-    padding: 5px;
-    border: none;
-    background: none;
-  }
+.side button,
+.menu button {
+  padding: 5px;
+  margin-bottom: 0.5vh;
+  border: none;
+  color: var(--color);
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+}
 
-  button:hover{
-    background: black;
-    color: #fff;
-    border-radius: 8px;
-  }
+.side button:hover,
+.menu button:hover {
+  background: var(--color);
+  color: var(--background-color);
+  border-radius: 8px;
+}
 
-  ul{
-    list-style-type:none;
-    }
+ul {
+  list-style-type: none;
 }
 
 #project-readme {
-  width: 80vw;
+  width: 75vw;
+  margin-right: 5vw;
 }

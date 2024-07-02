@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
@@ -19,6 +20,10 @@ import (
 
 type GitHubFileContent struct {
 	Content string `json:"content"`
+}
+
+type GitHubRepo struct {
+	Name string `json:"name"`
 }
 
 func getRepos(user string) ([]string, error) {
@@ -44,24 +49,58 @@ func getRepos(user string) ([]string, error) {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
 
-	var repos []struct {
-		Name string `json:"name"`
-	}
+	var repos []GitHubRepo
 	err = json.Unmarshal(body, &repos)
 	if err != nil {
-		return nil, fmt.Errorf("error unmarshalled response: %w", err)
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
 	}
 
-	var repoNames []string
+	var wg sync.WaitGroup
+	repoNames := make([]string, 0)
+	repoNamesMutex := &sync.Mutex{}
+
 	for _, repo := range repos {
-		repoNames = append(repoNames, repo.Name)
+		wg.Add(1)
+		go func(repo GitHubRepo) {
+			defer wg.Done()
+			if hasReadme(user, repo.Name) {
+				repoNamesMutex.Lock()
+				repoNames = append(repoNames, repo.Name)
+				repoNamesMutex.Unlock()
+			}
+		}(repo)
 	}
 
+	wg.Wait()
 	return repoNames, nil
 }
 
-func fetchRepoReadme(username string, repo string) (string, error) {
+func hasReadme(username, repo string) bool {
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/README.md", username, repo)
+	req, err := http.NewRequest("HEAD", url, nil)
+	if err != nil {
+		log.Printf("error creating request: %v", err)
+		return false
+	}
+
+	token := os.Getenv("GITHUB_TOKEN")
+	if token != "" {
+		req.Header.Set("Authorization", "token "+token)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("error fetching repo README: %v", err)
+		return false
+	}
+	defer resp.Body.Close()
+
+	return resp.StatusCode == http.StatusOK
+}
+
+func fetchRepoReadme(username string, repo string) (string, error) {
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/readme", username, repo)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return "", fmt.Errorf("error creating request: %w", err)
@@ -158,7 +197,9 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte("<div style=\"width:60vw\">"))
 	w.Write([]byte(readme))
+	w.Write([]byte("</div>"))
 }
 
 func ShowProjects(w http.ResponseWriter, r *http.Request) {
@@ -179,7 +220,6 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 	builder.WriteString("</ul></div>")
 	builder.WriteString("<div id=\"project-readme\"></div>")
 	builder.WriteString("</div>")
-
 
 	// Write HTML to response
 	w.Header().Set("Content-Type", "text/html")
