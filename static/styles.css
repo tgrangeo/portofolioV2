@@ -1,12 +1,12 @@
 /* Theme variables */
 :root {
-  --light-background-color: whitesmoke;
-  --light-text-color: #181818;
-  --light-color: #181818;
+  --light-background-color: #ebebeb;
+  --light-text-color: #0d0d0d;
+  --light-color: #0d0d0d;
 
-  --dark-background-color: #181818;
-  --dark-text-color: #eee;
-  --dark-color: #eee;
+  --dark-background-color: #0d0d0d;
+  --dark-text-color: #ebebeb;
+  --dark-color: #ebebeb;
 }
 
 /* Default to Light Theme */
@@ -68,17 +68,9 @@ img {
   align-items: center;
 }
 
-.about {
-  width: 60vw;
-}
-
 .projects {
   display: flex;
   flex-direction: row !important;
-}
-
-.side {
-  width: 20vw;
 }
 
 .side button,
@@ -102,8 +94,23 @@ img {
 ul {
   list-style-type: none;
 }
+.side {
+  width: 20vw;
+}
 
 #project-readme {
-  width: 75vw;
+  width: 73vw;
   margin-right: 5vw;
+}
+
+.theme-button {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.theme-button:active {
+  transform: scale(0.9);
 }

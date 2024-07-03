@@ -31,9 +31,7 @@
           Contact
         </button>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <span class="theme-icon" id="theme-icon">🌞</span>
-      </button>
+      <button class="theme-button" id="themeButton" onclick="toggleTheme()">☀️</button>
     </div>
     <div
       id="content"
@@ -49,7 +47,9 @@
         const html = document.querySelector("html");
         html.classList.toggle("dark-theme");
         html.classList.toggle("light-theme");
-        document.querySelector("theme-icon").textContent = "🌙";
+        const button = document.getElementById("themeButton");
+        const isSun = button.textContent === "☀️";
+        button.textContent = isSun ? "🌙" : "☀️";
       };
     </script>
   </body>
