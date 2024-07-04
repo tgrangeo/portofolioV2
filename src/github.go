@@ -32,6 +32,41 @@ type RepoNameAndDate struct {
 	PushedAt time.Time
 }
 
+type GitHubUser struct {
+	AvatarURL string `json:"avatar_url"`
+}
+
+func GetProfilePicture(username string) (string, error) {
+	url := fmt.Sprintf("https://api.github.com/users/%s", username)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return "", fmt.Errorf("error creating request: %w", err)
+	}
+
+	token := os.Getenv("GITHUB_TOKEN")
+	if token != "" {
+		req.Header.Set("Authorization", "token "+token)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error fetching user data: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	var user GitHubUser
+	err = json.NewDecoder(resp.Body).Decode(&user)
+	if err != nil {
+		return "", fmt.Errorf("error decoding response: %w", err)
+	}
+	return user.AvatarURL, nil
+}
+
 func getRepos(user string) ([]string, error) {
 	url := fmt.Sprintf("https://api.github.com/users/%s/repos", user)
 	log.Println(url)

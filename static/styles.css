@@ -35,7 +35,6 @@ body {
 
 img {
   max-width: 100%;
-  height: auto;
 }
 
 .title {
@@ -45,16 +44,14 @@ img {
 }
 
 .header {
-  /* border-bottom: 1px solid var(--color); */
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  margin-bottom: 2vh;
-}
-
-.header * {
-  margin-right: 1vw;
+  justify-content: space-between;
+  margin: 2vw;
+  img {
+    margin-right: 5px;
+  }
 }
 
 .header button {
@@ -114,3 +111,34 @@ ul {
 .theme-button:active {
   transform: scale(0.9);
 }
+
+.profile-picture {
+  border-radius: 50%;
+  border: 2px solid black;
+  width: 70px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.user-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  * {
+    margin-right: 0.5vw !important;
+  }
+}
+
+.footer {
+  padding:40px 0;
+}
+
+.footer .copyright {
+  margin-top:15px;
+  text-align:center;
+  font-size:13px;
+  margin-bottom:0;
+}
+

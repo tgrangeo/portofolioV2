@@ -4,11 +4,21 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
+
+
+func GetUsername(w http.ResponseWriter,r *http.Request){
+	username := os.Getenv("USERNAME")
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(username))
+}
+
 func ShowAbout(w http.ResponseWriter, r *http.Request) {
-	readme, err := fetchUserReadme("tgrangeo")
+	username := os.Getenv("USERNAME")
+	readme, err := fetchUserReadme(username)
 	if err != nil {
 		log.Printf("Error fetching user README: %v", err)
 		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
@@ -21,7 +31,8 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowProjects(w http.ResponseWriter, r *http.Request) {
-	repos, err := getRepos("tgrangeo")
+	username := os.Getenv("USERNAME")
+	repos, err := getRepos(username)
 	if err != nil {
 		log.Printf("Error fetching repos : %v", err)
 		http.Error(w, fmt.Sprintf("Error fetching repos: %v", err), http.StatusInternalServerError)
@@ -45,6 +56,7 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
+	username := os.Getenv("USERNAME")
 	// Extract the path parameter manually
 	path := r.URL.Path
 	segments := strings.Split(path, "/")
@@ -54,7 +66,7 @@ func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
 	}
 	name := segments[2]
 
-	readme, err := fetchRepoReadme("tgrangeo", name)
+	readme, err := fetchRepoReadme(username, name)
 	if err != nil {
 		log.Printf("Error fetching repo README: %v", err)
 		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
@@ -62,4 +74,19 @@ func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte(readme))
+}
+
+func ProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
+	username := os.Getenv("USERNAME")
+
+	avatarURL, err := GetProfilePicture(username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error fetching profile picture: %v", err), http.StatusInternalServerError)
+		return
+	}
+	log.Println(avatarURL)
+	var builder strings.Builder
+	w.Header().Set("Content-Type", "text/html")
+	builder.WriteString(fmt.Sprintf("<img class=\"profile-picture\" id=\"profile-picture\" width=\"70px\" src=\"%s\" alt=\"Profile\" disabled>", avatarURL))
+	w.Write([]byte(builder.String()))
 }
