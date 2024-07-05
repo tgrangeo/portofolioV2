@@ -63,6 +63,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 70vh;
 }
 
 .projects {
@@ -132,13 +133,30 @@ ul {
 }
 
 .footer {
-  padding:40px 0;
+  padding:20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer .copyright {
+width: auto;
+  display: flex;
+  flex-direction: row;
   margin-top:15px;
-  text-align:center;
+  justify-content: center;
   font-size:13px;
   margin-bottom:0;
+  color: var(--text-color);
+  text-decoration: none;
+  img{
+    margin-right: 5px;
+    margin-bottom: 2px;
+  }
 }
 
+.footer .copyright:hover {
+  border-bottom: var(--text-color) 2px solid;
+  cursor: pointer;
+}

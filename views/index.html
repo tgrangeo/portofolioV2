@@ -1,61 +1,114 @@
 <!DOCTYPE html>
 <html lang="en" class="light-theme">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tgrangeo</title>
+    <link rel="stylesheet" href="../static/styles.css" />
+    <!-- font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- htmx -->
+    <script
+      src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js"
+      integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
+      crossorigin="anonymous"
+    ></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tgrangeo</title>
-  <link rel="stylesheet" href="../static/styles.css" />
-  <!-- font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-    rel="stylesheet" />
-  <!-- htmx -->
-  <script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js"
-    integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
-    crossorigin="anonymous"></script>
-</head>
-
-<body>
-  <div id="header" class="header">
-    <div class="user-title">
-      <div id="profile-picture-container" hx-get="/profile-picture" hx-trigger="load" hx-target="#profile-picture"
-        hx-swap="outerHTML">
-        <img id="profile-picture" class="profile-picture" width="70px" src="static/placeholder.png" alt="Profile">
+  <body>
+    <div id="header" class="header">
+      <div class="user-title">
+        <div
+          id="profile-picture-container"
+          hx-get="/profile-picture"
+          hx-trigger="load"
+          hx-target="#profile-picture"
+          hx-swap="outerHTML"
+        >
+          <img
+            id="profile-picture"
+            class="profile-picture"
+            width="70px"
+            src="static/placeholder.png"
+            alt="Profile"
+          />
+        </div>
+        <h1
+          id="username"
+          class="title"
+          hx-get="/username"
+          hx-target="#username"
+          hx-swap="innerHTML"
+          hx-trigger="load"
+        >
+          username
+        </h1>
       </div>
-      <h1 id="username" class="title" hx-get="/username" hx-target="#username" hx-swap="innerHTML" hx-trigger="load">
-        username</h1>
+      <div class="menu">
+        <button hx-get="/about" hx-swap="innerHTML" hx-target="#content">
+          About
+        </button>
+        <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
+          Projects
+        </button>
+        <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
+          Contact
+        </button>
+      </div>
+      <button class="theme-button" id="themeButton" onclick="toggleTheme()">
+        ☀️
+      </button>
     </div>
-    <div class="menu">
-      <button hx-get="/about" hx-swap="innerHTML" hx-target="#content">
-        About
-      </button>
-      <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
-        Projects
-      </button>
-      <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
-        Contact
-      </button>
+    <div
+      id="content"
+      class="content"
+      hx-get="/about"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+    >
+      {{.Readme}}
     </div>
-    <button class="theme-button" id="themeButton" onclick="toggleTheme()">
-      ☀️
-    </button>
-  </div>
-  </div>
-  <div id="content" class="content" hx-get="/about" hx-trigger="load" hx-swap="innerHTML">
-    {{.Readme}}
     <div class="footer">
-      <p class="copyright">tgrangeo ©2024</p>
+      <a href="https://github.com/tgrangeo" class="copyright"
+        ><img src="../static/github-icon.png" width="20px" />tgrangeo ©2024</a
+      >
     </div>
-</body>
+  </body>
 </html>
 <script>
   const toggleTheme = () => {
     const html = document.querySelector("html");
-    html.classList.toggle("dark-theme");
-    html.classList.toggle("light-theme");
     const button = document.getElementById("themeButton");
-    const isSun = button.textContent === "☀️";
-    button.textContent = isSun ? "🌙" : "☀️";
+    const isLight = html.classList.contains("light-theme");
+    if (isLight) {
+      html.classList.remove("light-theme");
+      html.classList.add("dark-theme");
+      button.textContent = "🌙";
+      localStorage.setItem("theme", "dark");
+    } else {
+      html.classList.remove("dark-theme");
+      html.classList.add("light-theme");
+      button.textContent = "☀️";
+      localStorage.setItem("theme", "light");
+    }
   };
+  const setThemeOnLoad = () => {
+    const theme = localStorage.getItem("theme");
+    const html = document.querySelector("html");
+    const button = document.getElementById("themeButton");
+
+    if (theme === "dark") {
+      html.classList.remove("light-theme");
+      html.classList.add("dark-theme");
+      button.textContent = "🌙";
+    } else {
+      html.classList.remove("dark-theme");
+      html.classList.add("light-theme");
+      button.textContent = "☀️";
+    }
+  };
+  document.addEventListener("DOMContentLoaded", setThemeOnLoad);
 </script>
