@@ -69,7 +69,6 @@ func GetProfilePicture(username string) (string, error) {
 
 func getRepos(user string) ([]string, error) {
 	url := fmt.Sprintf("https://api.github.com/users/%s/repos", user)
-	log.Println(url)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

@@ -21,15 +21,19 @@ func init() {
 	tmpl = template.Must(template.ParseGlob("views/*.html"))
 }
 
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl.ExecuteTemplate(w, "index.html", nil)
 	})
+	http.HandleFunc("/contact", src.ContactHandler)
+	http.HandleFunc("/submit", src.HandleSubmit)
 	http.HandleFunc("/projects", src.ShowProjects)
 	http.HandleFunc("/about", src.ShowAbout)
 	http.HandleFunc("/readme/", src.ShowProjectReadme)
 	http.HandleFunc("/profile-picture", src.ProfilePictureHandler)
 	http.HandleFunc("/username", src.GetUsername)
+
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

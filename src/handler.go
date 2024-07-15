@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"text/template"
 )
 
+var tmpl *template.Template
 
-
-func GetUsername(w http.ResponseWriter,r *http.Request){
+func GetUsername(w http.ResponseWriter, r *http.Request) {
 	username := os.Getenv("USERNAME")
 	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte(username))
@@ -84,9 +85,32 @@ func ProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("Error fetching profile picture: %v", err), http.StatusInternalServerError)
 		return
 	}
-	log.Println(avatarURL)
 	var builder strings.Builder
 	w.Header().Set("Content-Type", "text/html")
 	builder.WriteString(fmt.Sprintf("<img class=\"profile-picture\" id=\"profile-picture\" width=\"70px\" src=\"%s\" alt=\"Profile\" disabled>", avatarURL))
 	w.Write([]byte(builder.String()))
+}
+
+func ContactHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(contactTemplate))
+}
+
+func HandleSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+
+		form := SubmitForm{
+			name: r.FormValue("name"),
+			mail: r.FormValue("mail"),
+			message: r.FormValue("message"),
+		}
+		w.Header().Set("Content-Type", "text/html")
+		if ContactSend(form){
+			w.Write([]byte(contactTemplateSubmitted))
+		} else{
+			w.Write([]byte(contactTemplateFalse))
+		}
+		return
+	}
+	http.Redirect(w, r, "/contact", http.StatusSeeOther)
 }
