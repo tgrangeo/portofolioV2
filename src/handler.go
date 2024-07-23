@@ -113,4 +113,4 @@ func HandleSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/contact", http.StatusSeeOther)
-}
+}	

@@ -203,7 +203,7 @@ ul {
   height: 120px;
 }
 
-.contactForm input[type="submit"] {
+.contactButton {
   background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
@@ -213,11 +213,16 @@ ul {
   font-size: 14px;
 }
 
-.contactForm input[type="submit"]:hover {
+.contactButton:hover {
   background-color: #45a049;
 }
 
 .contactForm p {
   margin-top: 10px;
   font-style: italic;
+}
+
+.contactError{
+  font-size: 20px;
+  color: rgb(200, 0, 0);
 }
