@@ -26,7 +26,7 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte("<div style=\"width:60vw\">"))
+	w.Write([]byte("<div class=\"content-readme\""))
 	w.Write([]byte(readme))
 	w.Write([]byte("</div>"))
 }

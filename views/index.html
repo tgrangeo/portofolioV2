@@ -20,6 +20,7 @@
 
   <body>
     <div id="header" class="header">
+      <span class="mobile-side-menu" onClick="openNav()">&#9776;</span>
       <div class="user-title">
         <div
           id="profile-picture-container"
@@ -47,20 +48,38 @@
           username
         </h1>
       </div>
-      <div class="menu">
-        <button hx-get="/about" hx-swap="innerHTML" hx-target="#content">
+      <div class="menu" id="menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+          >&times;</a
+        >
+        <button
+          hx-get="/about"
+          hx-swap="innerHTML"
+          hx-target="#content"
+          onclick="closeNav()"
+        >
           About
         </button>
-        <button hx-get="/projects" hx-swap="innerHTML" hx-target="#content">
+        <button
+          hx-get="/projects"
+          hx-swap="innerHTML"
+          hx-target="#content"
+          onclick="closeNav()"
+        >
           Projects
         </button>
-        <button hx-get="/contact" hx-swap="innerHTML" hx-target="#content">
+        <button
+          hx-get="/contact"
+          hx-swap="innerHTML"
+          hx-target="#content"
+          onclick="closeNav()"
+        >
           Contact
         </button>
+        <button class="theme-button" id="themeButton" onclick="toggleTheme()">
+          ☀️
+        </button>
       </div>
-      <button class="theme-button" id="themeButton" onclick="toggleTheme()">
-        ☀️
-      </button>
     </div>
     <div
       id="content"
@@ -68,8 +87,7 @@
       hx-get="/about"
       hx-trigger="load"
       hx-swap="innerHTML"
-    >
-    </div>
+    ></div>
     <div class="footer">
       <a href="https://github.com/tgrangeo" class="copyright"
         ><img src="../static/github-icon.png" width="20px" />tgrangeo ©2024</a
@@ -78,6 +96,16 @@
   </body>
 </html>
 <script>
+  //mobile side
+  function openNav() {
+    document.getElementById("menu").style.display = "flex";
+  }
+  function closeNav() {
+    if (window.innerWidth <= 480) {
+      document.getElementById("menu").style.display = "none";
+    }
+  }
+  //theme
   const toggleTheme = () => {
     const html = document.querySelector("html");
     const button = document.getElementById("themeButton");
