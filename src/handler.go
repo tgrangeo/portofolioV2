@@ -17,6 +17,12 @@ func GetUsername(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(username))
 }
 
+func SetUsername(w http.ResponseWriter, r *http.Request) {
+	os.Setenv("USERNAME","edepauw")
+	log.Println(os.Getenv("USERNAME"))
+	tmpl.ExecuteTemplate(w, "index.html", nil)
+}
+
 func ShowAbout(w http.ResponseWriter, r *http.Request) {
 	username := os.Getenv("USERNAME")
 	readme, err := fetchUserReadme(username)
@@ -42,13 +48,16 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 
 	// Generate HTML for each repo
 	var builder strings.Builder
-	builder.WriteString("<div class=\"projects\">")
-	builder.WriteString("<div class=\"side\"><ul>")
+	builder.WriteString("<div class=\"projects\"><button class=\"side-project-button\" onClick=\"openProjectSide()\">Select a project</button>")
+
+
+
+	builder.WriteString("<div id=\"side\" class=\"side\"><ul>")
 	for _, repo := range repos {
-		builder.WriteString(fmt.Sprintf("<li><button hx-get=\"/readme/%s\" hx-target=\"#project-readme\" hx-swap=\"innerHTML\">%s</button></li>", repo, repo))
+		builder.WriteString(fmt.Sprintf("<li><button onclick=\"closeProjectSide()\" hx-get=\"/readme/%s\" hx-target=\"#project-readme\" hx-swap=\"innerHTML\">%s</button></li>", repo, repo))
 	}
 	builder.WriteString("</ul></div>")
-	builder.WriteString("<div id=\"project-readme\"><div style=\"display:flex;height:100%;align-items:center;justify-content:center\">select a project to begin</div></div>")
+	builder.WriteString("<div id=\"project-readme\">select a project to begin</div>")
 	builder.WriteString("</div>")
 
 	// Write HTML to response

@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 	"portofolio/src"
 
 	"github.com/joho/godotenv"
@@ -14,7 +13,6 @@ var tmpl *template.Template
 
 func init() {
 	err := godotenv.Load()
-	os.Setenv("USERNAME","tgrangeo")
 	if err != nil {
 		log.Printf("Error loading .env file: %v", err)
 	}
@@ -33,6 +31,7 @@ func main() {
 	http.HandleFunc("/readme/", src.ShowProjectReadme)
 	http.HandleFunc("/profile-picture", src.ProfilePictureHandler)
 	http.HandleFunc("/username", src.GetUsername)
+	http.HandleFunc("/submit-username", src.SetUsername)
 
 
 	fs := http.FileServer(http.Dir("./static"))

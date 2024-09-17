@@ -15,7 +15,7 @@ type SubmitForm struct{
 }
 
 var contactTemplate = `
-<h1>Contact Us</h1>
+<h1>Contact Me</h1>
 <form id="contactForm" class="contactForm" hx-post="/submit" hx-swap="innerHTML" hx-target="#content">
 	<label for="name">Name:</label>
 	<input type="text" id="name" name="name" value="">
@@ -31,14 +31,14 @@ var contactTemplate = `
 `
 
 var contactTemplateSubmitted = `
-<h1>Contact Us</h1>
+<h1>Contact Me</h1>
 <p>Thank you for submitting the form!</p>
 <p>We will answer you in the most briefly delay</p>
 <button class="contactButton" hx-get="/about" hx-swap="innerHTML" hx-target="#content" >Go back to homepage</button>
 `
 
 var contactTemplateFalse = `
-<h1>Contact Us</h1>
+<h1>Contact Me</h1>
 <p class="contactError"> Something went wrong please try again !</p>
 <form id="contactForm" class="contactForm" hx-post="/submit" hx-swap="innerHTML" hx-target="#content">
 	<label for="name">Name:</label>

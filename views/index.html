@@ -47,17 +47,30 @@
         >
           username
         </h1>
+        <!-- <form
+          id="username-form"
+          hx-get="/submit-username"
+          >
+          <input
+            id="username-input"
+            name="username"
+            type="text"
+            placeholder="Enter your username"
+          />
+          <button type="submit">Submit</button>
+        </form> -->
       </div>
       <div class="menu" id="menu">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
           >&times;</a
         >
-        <button
+        <div class="mobile-menu-div">
+          <button
           hx-get="/about"
           hx-swap="innerHTML"
           hx-target="#content"
           onclick="closeNav()"
-        >
+          >
           About
         </button>
         <button
@@ -80,6 +93,7 @@
           ☀️
         </button>
       </div>
+      </div>
     </div>
     <div
       id="content"
@@ -96,13 +110,25 @@
   </body>
 </html>
 <script>
-  //mobile side
+  //mobile menu side
   function openNav() {
     document.getElementById("menu").style.display = "flex";
   }
   function closeNav() {
     if (window.innerWidth <= 480) {
       document.getElementById("menu").style.display = "none";
+    }
+  }
+  //mobile project side
+  function openProjectSide() {
+    let state = document.getElementById("side").style.display;
+    if (state === "flex")
+      document.getElementById("side").style.display = "none";
+    else document.getElementById("side").style.display = "flex";
+  }
+  function closeProjectSide() {
+    if (window.innerWidth <= 480) {
+      document.getElementById("side").style.display = "none";
     }
   }
   //theme
