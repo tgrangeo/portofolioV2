@@ -6,16 +6,16 @@ import (
 	"net/http"
 	"portofolio/src"
 
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 var tmpl *template.Template
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Printf("Error loading .env file: %v", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Printf("Error loading .env file: %v", err)
+	// }
 	tmpl = template.Must(template.ParseGlob("views/*.html"))
 }
 
