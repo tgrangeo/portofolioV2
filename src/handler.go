@@ -54,7 +54,7 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 
 	builder.WriteString("<div id=\"side\" class=\"side\"><ul>")
 	for _, repo := range repos {
-		builder.WriteString(fmt.Sprintf(`<li><button onclick="closeProjectSide()" hx-get="/readme/%s" hx-target="#project-readme" hx-swap="innerHTML">%s</button><button id="github-icon" onhover="githubIconTheme()" onclick="linkToGithub('%s')"><img class="github-icon" src="../static/github-black.png" width="18px" /></button></li>`, repo, repo, repo))
+		builder.WriteString(fmt.Sprintf(`<li><button onclick="closeProjectSide()" hx-get="/readme/%s" hx-target="#project-readme" hx-swap="innerHTML">%s</button><button onclick="linkToGithub('%s')"><img class="github-icon" src="../static/github-black.png" width="18px" /></button></li>`, repo, repo, repo))
 	}
 	builder.WriteString("</ul></div>")
 	builder.WriteString("<div id=\"project-readme\">select a project to begin</div>")

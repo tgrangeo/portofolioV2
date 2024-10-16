@@ -174,15 +174,5 @@
 
     window.open(`https://github.com/${username}/${repo}`, "_blank");
   };
-
-  const githubIconTheme = () => {
-    const icon = document.getElementById("github-icon");
-    if (icon.style.filter === "invert(100%)") {
-      icon.style.filter = "invert(0%)";
-    } else {
-      icon.style.filter = "invert(100%)";
-    }
-  };
-
   document.addEventListener("DOMContentLoaded", setThemeOnLoad);
 </script>
