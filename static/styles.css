@@ -7,6 +7,23 @@
   --dark-background-color: #0d0d0d;
   --dark-text-color: #ebebeb;
   --dark-color: #ebebeb;
+  transition: filter 0.3s ease;
+}
+
+/* Change link color */
+a {
+  color: var(--hover);
+}
+
+a:hover {
+  color: #fdbc72;
+}
+
+a:visited {
+  color: var(--hover);
+}
+a:visited:hover {
+  color: #fdbc72;
 }
 
 /* Default to Light Theme */
@@ -14,6 +31,7 @@ html.light-theme {
   --background-color: var(--light-background-color);
   --text-color: var(--light-text-color);
   --color: var(--light-color);
+  --hover: #f1802d;
 }
 
 /* Dark Theme */
@@ -21,6 +39,11 @@ html.dark-theme {
   --background-color: var(--dark-background-color);
   --text-color: var(--dark-text-color);
   --color: var(--dark-color);
+  --hover: #f1802d;
+
+  .github-icon {
+    filter: invert(100%);
+  }
 }
 
 body {
@@ -85,7 +108,7 @@ img {
 
 .side button:hover,
 .menu button:hover {
-  background: var(--color);
+  background: var(--hover);
   color: var(--background-color);
   border-radius: 8px;
 }
@@ -161,7 +184,7 @@ ul {
 }
 
 .footer .copyright:hover {
-  border-bottom: var(--text-color) 2px solid;
+  border-bottom: var(--hover) 2px solid;
   cursor: pointer;
 }
 
@@ -196,7 +219,7 @@ ul {
 .contactForm input[type="text"]:focus,
 .contactForm input[type="email"]:focus,
 .contactForm textarea:focus {
-  border: 2px solid #4caf50;
+  border: 2px solid var(var(--hover));
 }
 
 .contactForm textarea {
@@ -214,7 +237,7 @@ ul {
 }
 
 .contactButton:hover {
-  background-color: #45a049;
+  background-color: var(--hover);
 }
 
 .contactForm p {
@@ -322,12 +345,11 @@ ul {
 }
 
 @media (max-width: 480px) {
-
-  #profile-picture{
-    display:none
+  #profile-picture {
+    display: none;
   }
-  #username-form{
-    display:none
+  #username-form {
+    display: none;
   }
 
   .side-project-button {
@@ -382,7 +404,7 @@ ul {
     width: 80vw;
   }
 
-  .mobile-menu-div{
+  .mobile-menu-div {
     margin-top: 30px;
     width: 100vw;
     display: flex;
@@ -416,7 +438,7 @@ ul {
   }
 
   .menu a:hover {
-    color: #f1f1f1;
+    color: var(--hover);
   }
 
   .menu .closebtn {
@@ -429,7 +451,7 @@ ul {
   }
 
   .menu .closebtn:hover {
-    color: var(--color);
+    color: var(--hover);
   }
 
   /* end menu */

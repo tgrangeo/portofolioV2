@@ -4,21 +4,26 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"portofolio/src"
 
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 )
 
 var tmpl *template.Template
 
 func init() {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Printf("Error loading .env file: %v", err)
-	// }
+	env := os.Getenv("ENV")
+    log.Printf("Current ENV variable: %s", env)
+
+    if env != "PROD" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Printf("Error loading .env file: %v", err)
+		}
+	}
 	tmpl = template.Must(template.ParseGlob("views/*.html"))
 }
-
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +37,6 @@ func main() {
 	http.HandleFunc("/profile-picture", src.ProfilePictureHandler)
 	http.HandleFunc("/username", src.GetUsername)
 	http.HandleFunc("/submit-username", src.SetUsername)
-
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

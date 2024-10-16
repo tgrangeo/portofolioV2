@@ -1,63 +1,69 @@
-# Portfolio V2
+**🚀 Portfolio V2**
 
-Portfolio V2 is a personal portfolio website built with Go (Golang) and Flutter, showcasing my projects and providing information about me.
+Portfolio V2 is a personal portfolio website built with Go (Golang) and Flutter, designed to showcase my projects and provide details about me.
+🛠️ Roadmap
 
-## Features
+Add GitHub repo quick link
+Home page: Select GitHub profile
+Improve link color
 
-- Displays a list of projects from GitHub repositories.
-- Allows users to view project details and README files.
-- Includes an "About Me" section with a biography and skills.
+    Make project page responsive
 
-## Technologies Used
+**✨ Features**
 
-- **Backend:** Go (Golang), HTTP Server, GitHub API integration.
-- **Frontend:** Htmx, HTML/CSS.
-- **Markdown Parsing:** gomarkdown/markdown library.
-- **Others:** GitHub Api, dotenv for environment variables.
+    📂 Displays a list of projects from GitHub repositories.
+    📝 Allows users to view project details and README files.
+    👤 Includes an "About Me" section with biography and skills.
 
-## Setup
+**🔧 Technologies Used**
 
-### Prerequisites
+    Backend: Go (Golang), HTTP Server, GitHub API integration.
+    Frontend: Htmx, HTML/CSS.
+    Markdown Parsing: gomarkdown/markdown library.
+    Others: GitHub API, dotenv for environment variables.
 
-- Go (Golang) installed on your machine.
-- GitHub account with personal access token for API access.
+**⚙️ Setup**
+📝 Prerequisites
 
-### Installation
+    Go (Golang) installed on your machine.
+    GitHub account with a personal access token for API access.
 
-1. Clone the repository:
+**🛠️ Installation**
 
-   ```bash
-   git clone https://github.com/tgrangeo/portofolioV2.git
-   cd portofolioV2
-   ```
+    Clone the repository:
 
-2. Set up environment variables:
+    bash
 
-   Create a `.env` file in the root directory and add the following:
+git clone https://github.com/tgrangeo/portofolioV2.git
+cd portofolioV2
 
-   ```plaintext
-   GITHUB_TOKEN=your_github_personal_access_token
-   ```
+Set up environment variables:
 
-   Replace `your_github_personal_access_token` with your actual GitHub personal access token.
+Create a .env file in the root directory and add the following:
 
-3. Build and run the Go backend:
+plaintext
 
-   ```bash
-   ./bin/air
-   ```
+GITHUB_TOKEN=your_github_personal_access_token
 
-4. Access the application:
+Replace your_github_personal_access_token with your actual GitHub personal access token.
 
-   Open a web browser and go to `http://localhost:3000` to view the portfolio.
+Build and run the Go backend:
 
-## Usage
+bash
 
-- **Projects:** Navigate to the "Projects" section to see a list of GitHub repositories.
-- **Project Details:** Click on a project to view its details and README file.
-- **About Me:** Visit the "About Me" section to learn more about the owner of the portfolio.
+    ./bin/air
 
-## Acknowledgments
+    Access the application:
 
-- **gomarkdown/markdown:** Used for parsing Markdown files.
-- **joho/godotenv:** Used for loading environment variables from `.env` files.
+    Open a web browser and go to http://localhost:3000 to view the portfolio.
+
+**🚀 Usage**
+
+    Projects: Navigate to the "Projects" section to see a list of GitHub repositories.
+    Project Details: Click on a project to view its details and README file.
+    About Me: Visit the "About Me" section to learn more about the portfolio owner.
+
+**🙏 Acknowledgments**
+
+    gomarkdown/markdown: For Markdown parsing.
+    joho/godotenv: For loading environment variables from .env files.

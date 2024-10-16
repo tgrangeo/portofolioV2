@@ -66,33 +66,33 @@
         >
         <div class="mobile-menu-div">
           <button
-          hx-get="/about"
-          hx-swap="innerHTML"
-          hx-target="#content"
-          onclick="closeNav()"
+            hx-get="/about"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            onclick="closeNav()"
           >
-          About
-        </button>
-        <button
-          hx-get="/projects"
-          hx-swap="innerHTML"
-          hx-target="#content"
-          onclick="closeNav()"
-        >
-          Projects
-        </button>
-        <button
-          hx-get="/contact"
-          hx-swap="innerHTML"
-          hx-target="#content"
-          onclick="closeNav()"
-        >
-          Contact
-        </button>
-        <button class="theme-button" id="themeButton" onclick="toggleTheme()">
-          ☀️
-        </button>
-      </div>
+            About
+          </button>
+          <button
+            hx-get="/projects"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            onclick="closeNav()"
+          >
+            Projects
+          </button>
+          <button
+            hx-get="/contact"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            onclick="closeNav()"
+          >
+            Contact
+          </button>
+          <button class="theme-button" id="themeButton" onclick="toggleTheme()">
+            ☀️
+          </button>
+        </div>
       </div>
     </div>
     <div
@@ -104,7 +104,11 @@
     ></div>
     <div class="footer">
       <a href="https://github.com/tgrangeo" class="copyright"
-        ><img src="../static/github-icon.png" width="20px" />tgrangeo ©2024</a
+        ><img
+          src="../static/github-black.png"
+          class="github-icon"
+          width="20px"
+        />tgrangeo ©2024</a
       >
     </div>
   </body>
@@ -163,5 +167,22 @@
       button.textContent = "☀️";
     }
   };
+  const linkToGithub = (repo) => {
+    const userTitle = document.querySelector(".user-title").textContent;
+    const decodedUserTitle = decodeURIComponent(userTitle);
+    const username = decodedUserTitle.trim();
+
+    window.open(`https://github.com/${username}/${repo}`, "_blank");
+  };
+
+  const githubIconTheme = () => {
+    const icon = document.getElementById("github-icon");
+    if (icon.style.filter === "invert(100%)") {
+      icon.style.filter = "invert(0%)";
+    } else {
+      icon.style.filter = "invert(100%)";
+    }
+  };
+
   document.addEventListener("DOMContentLoaded", setThemeOnLoad);
 </script>
