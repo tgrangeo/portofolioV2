@@ -21,7 +21,7 @@
   <body>
     <div id="header" class="header">
       <span class="mobile-side-menu" onClick="openNav()">&#9776;</span>
-      <div class="user-title">
+      <div class="user-title" hx-post="/" hx-push-url="/" hx-target="body" hx-swap="outerHTML">
         <div
           id="profile-picture-container"
           hx-get="/profile-picture"

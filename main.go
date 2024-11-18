@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"os"
 	"portofolio/src"
+	"time"
+
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -14,9 +17,9 @@ var tmpl *template.Template
 
 func init() {
 	env := os.Getenv("ENV")
-    log.Printf("Current ENV variable: %s", env)
+	log.Printf("Current ENV variable: %s", env)
 
-    if env != "PROD" {
+	if env != "PROD" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Printf("Error loading .env file: %v", err)
@@ -27,7 +30,25 @@ func init() {
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.ExecuteTemplate(w, "index.html", nil)
+		// w.Header().Set("HX-Redirect", "/")
+		tmpl.ExecuteTemplate(w, "home.html", nil)
+	})
+
+	http.HandleFunc("/user/", func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(200 *time.Millisecond)
+		path := r.URL.Path
+		userID := strings.TrimPrefix(path, "/user/")
+		if userID == "" {
+			http.Error(w, "User ID is required", http.StatusBadRequest)
+			return
+		}
+		os.Setenv("USERNAME", userID)
+		w.Header().Set("HX-Redirect", "/user/tgrangeo")
+		err := tmpl.ExecuteTemplate(w, "index.html", nil)
+		if err != nil {
+			http.Error(w, "Template rendering error", http.StatusInternalServerError)
+			log.Println("Template error:", err)
+		}
 	})
 	http.HandleFunc("/contact", src.ContactHandler)
 	http.HandleFunc("/submit", src.HandleSubmit)
@@ -40,7 +61,6 @@ func main() {
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-
 	log.Println("🚀 Starting up on port 3000")
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }

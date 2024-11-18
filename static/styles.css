@@ -140,7 +140,7 @@ ul {
 
 .profile-picture {
   border-radius: 50%;
-  border: 2px solid black;
+  border: 2px solid var(--hover);
   width: 70px;
   -webkit-user-select: none;
   -ms-user-select: none;

@@ -25,6 +25,7 @@ func SetUsername(w http.ResponseWriter, r *http.Request) {
 
 func ShowAbout(w http.ResponseWriter, r *http.Request) {
 	username := os.Getenv("USERNAME")
+	fmt.Println(username)
 	readme, err := fetchUserReadme(username)
 	if err != nil {
 		log.Printf("Error fetching user README: %v", err)

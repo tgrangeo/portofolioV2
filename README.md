@@ -15,6 +15,10 @@ Improve link color
     📝 Allows users to view project details and README files.
     👤 Includes an "About Me" section with biography and skills.
 
+
+    Next: 
+        adding ai auto generate resume from last readmes to know better him (cool in case the user don t use it s readme)
+
 **🔧 Technologies Used**
 
     Backend: Go (Golang), HTTP Server, GitHub API integration.
