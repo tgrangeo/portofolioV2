@@ -11,20 +11,31 @@ import (
 
 var tmpl *template.Template
 
+var username = "tgrangeo"
+
 func GetUsername(w http.ResponseWriter, r *http.Request) {
-	username := os.Getenv("USERNAME")
 	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte(username))
 }
 
 func SetUsername(w http.ResponseWriter, r *http.Request) {
-	os.Setenv("USERNAME","edepauw")
-	log.Println(os.Getenv("USERNAME"))
-	tmpl.ExecuteTemplate(w, "index.html", nil)
+	fmt.Println(r.URL)
+	path := r.URL.Path
+	n := strings.Split(path, "/")[2]
+	username = n
+}
+
+func ShowBrowse(w http.ResponseWriter, r *http.Request) {
+	htmlFile, err := os.ReadFile("views/browse.html")
+	if err != nil {
+		http.Error(w, "Unable to read HTML file", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	w.Write(htmlFile)
 }
 
 func ShowAbout(w http.ResponseWriter, r *http.Request) {
-	username := os.Getenv("USERNAME")
 	fmt.Println(username)
 	readme, err := fetchUserReadme(username)
 	if err != nil {
@@ -39,7 +50,6 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowProjects(w http.ResponseWriter, r *http.Request) {
-	username := os.Getenv("USERNAME")
 	repos, err := getRepos(username)
 	if err != nil {
 		log.Printf("Error fetching repos : %v", err)
@@ -50,8 +60,6 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 	// Generate HTML for each repo
 	var builder strings.Builder
 	builder.WriteString("<div class=\"projects\"><button class=\"side-project-button\" onClick=\"openProjectSide()\">Select a project</button>")
-
-
 
 	builder.WriteString("<div id=\"side\" class=\"side\"><ul>")
 	for _, repo := range repos {
@@ -67,8 +75,6 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
-	username := os.Getenv("USERNAME")
-	// Extract the path parameter manually
 	path := r.URL.Path
 	segments := strings.Split(path, "/")
 	if len(segments) < 3 || segments[2] == "" {
@@ -88,8 +94,6 @@ func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
-	username := os.Getenv("USERNAME")
-
 	avatarURL, err := GetProfilePicture(username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error fetching profile picture: %v", err), http.StatusInternalServerError)
@@ -110,17 +114,17 @@ func HandleSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 
 		form := SubmitForm{
-			name: r.FormValue("name"),
-			mail: r.FormValue("mail"),
+			name:    r.FormValue("name"),
+			mail:    r.FormValue("mail"),
 			message: r.FormValue("message"),
 		}
 		w.Header().Set("Content-Type", "text/html")
-		if ContactSend(form){
+		if ContactSend(form) {
 			w.Write([]byte(contactTemplateSubmitted))
-		} else{
+		} else {
 			w.Write([]byte(contactTemplateFalse))
 		}
 		return
 	}
 	http.Redirect(w, r, "/contact", http.StatusSeeOther)
-}	
+}

@@ -1,0 +1,117 @@
+<style>
+  .browse {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  input[type="text"] {
+    width: 500px;
+    padding: 10px 15px;
+    font-size: 1.2em;
+    border: 2px solid #ccc;
+    border-radius: 15px 0 0 15px;
+    outline: none;
+  }
+
+  .search-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: 2px solid #28a745;
+    border-left: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 0 15px 15px 0;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .search-button:hover {
+    background-color: #218838;
+  }
+
+  .me-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: 2px solid #28a745;
+    border-left: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .me-button:hover {
+    background-color: #218838;
+  }
+</style>
+<div class="browse">
+  <h1>Bienvenue sur le moteur de recherche</h1>
+  <p>
+    Trouvez rapidement les informations que vous recherchez grâce à notre moteur
+    de recherche intuitif.
+  </p>
+  <div class="search-box">
+    <input id="searchInput" type="text" placeholder="Rechercher..." />
+    <button id="searchButton" class="search-button" type="button">
+      Rechercher
+    </button>
+  </div>
+  <p>Ou consulter simplement mon profil.</p>
+  <button id="meButton" class="me-button">me</button>
+</div>
+
+<script>
+	document
+	.getElementById("searchButton")
+	.addEventListener("click", function () {
+	  const input = document.getElementById("searchInput").value;
+	  if (input.trim() !== "") {
+		fetch(`/new-username/${encodeURIComponent(input)}`, {
+		  method: "GET",
+		})
+		  .then((response) => {
+			if (response.ok) {
+			  return response.text(); // Handle response data if needed
+			} else {
+			  throw new Error("Erreur lors de la recherche");
+			}
+		  })
+		  .then(() => {
+			// Reload the page if the request was successful
+			location.reload();
+		
+		  })
+		  .catch((error) => {
+			console.error("Une erreur s'est produite:", error.message);
+		  });
+	  }
+	});
+  
+  document.getElementById("meButton").addEventListener("click", function () {
+    fetch("/new-username/tgrangeo", {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error("Erreur lors de la récupération du profil");
+        }
+      })
+      .then((data) => {
+        location.reload();
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
+</script>

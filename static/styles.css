@@ -47,7 +47,9 @@ html.dark-theme {
 }
 
 body {
+  
   margin: 0;
+  margin-left: 50px;
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: "Roboto", sans-serif;
@@ -56,9 +58,51 @@ body {
   font-size: 18px;
 }
 
+
 img {
   max-width: 100%;
 }
+
+
+.side-menu {
+  position: fixed;
+  left: -200px; /* Menu caché de 200px par défaut */
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #262626;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.side-menu-container {
+  position: relative;
+  width: 100%; /* ou la largeur de la zone que vous voulez utiliser pour afficher l'élément */
+}
+
+.side-menu-container:hover .side-menu {
+  left: 0; /* Affiche le menu lorsqu'on survole le conteneur */
+}
+
+.side-menu-container:hover .side-menu-icon {
+  display: none; /* Affiche le menu lorsqu'on survole le conteneur */
+}
+
+.side-menu ul {
+  list-style-type: none;
+  padding: 20px;
+}
+
+.side-menu ul li {
+  margin: 20px 0;
+}
+
+.side-menu ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
 
 .title {
   -webkit-user-select: none;
@@ -70,7 +114,7 @@ img {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content:space-between;
   margin: 2vw;
 }
 
@@ -121,8 +165,14 @@ ul {
   width: 20vw;
 }
 
+.side-menu-icon{
+  position: absolute;
+  top: 50vh;
+  right: 15px;
+}
+
 #project-readme {
-  width: 73vw;
+  width: 70vw;
   margin-right: 5vw;
 }
 
@@ -170,7 +220,7 @@ ul {
   width: auto;
   display: flex;
   flex-direction: row;
-  margin-top: 15px;
+  margin-top: 8vh;
   justify-content: center;
   font-size: 13px;
   margin-bottom: 0;
@@ -302,7 +352,7 @@ ul {
   }
 
   .side {
-    width: 100%;
+    /* width: 100%; */
     margin-bottom: 20px;
   }
 

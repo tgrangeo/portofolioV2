@@ -19,46 +19,58 @@
   </head>
 
   <body>
+    <div class="side-menu-container">
+      <div class="side-menu">
+        <h1 class="side-menu-icon">></h1>
+        <ul>
+          <li>
+            <button hx-get="/browse" hx-swap="innerHTML" hx-target="#content">
+              Browse
+            </button>
+          </li>
+          <li>
+            <button id="meButton" hx-target="#content">
+              Me
+            </button>
+          </li>
+          <li>
+            <button hx-get="/contact" hx-swap="innerHTML" hx-target="#content">
+              Contact
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div id="header" class="header">
-      <span class="mobile-side-menu" onClick="openNav()">&#9776;</span>
-      <div class="user-title" hx-post="/" hx-push-url="/" hx-target="body" hx-swap="outerHTML">
-        <div
-          id="profile-picture-container"
-          hx-get="/profile-picture"
-          hx-trigger="load"
-          hx-target="#profile-picture"
-          hx-swap="outerHTML"
-        >
-          <img
-            id="profile-picture"
-            class="profile-picture"
-            width="70px"
-            src="static/placeholder.png"
-            alt="Profile"
-          />
-        </div>
-        <h1
-          id="username"
-          class="title"
-          hx-get="/username"
-          hx-target="#username"
-          hx-swap="innerHTML"
-          hx-trigger="load"
-        >
-          username
-        </h1>
-        <!-- <form
-          id="username-form"
-          hx-get="/submit-username"
+      <!-- <span class="mobile-mobile-menu" onClick="openNav()">&#9776;</span> -->
+      <div>
+        <div class="user-title">
+          <div
+            id="profile-picture-container"
+            hx-get="/profile-picture"
+            hx-trigger="load"
+            hx-target="#profile-picture"
+            hx-swap="outerHTML"
           >
-          <input
-            id="username-input"
-            name="username"
-            type="text"
-            placeholder="Enter your username"
-          />
-          <button type="submit">Submit</button>
-        </form> -->
+            <img
+              id="profile-picture"
+              class="profile-picture"
+              width="70px"
+              src="static/placeholder.png"
+              alt="Profile"
+            />
+          </div>
+          <h1
+            id="username"
+            class="title"
+            hx-get="/username"
+            hx-target="#username"
+            hx-swap="innerHTML"
+            hx-trigger="load"
+          >
+            username
+          </h1>
+        </div>
       </div>
       <div class="menu" id="menu">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
@@ -81,24 +93,16 @@
           >
             Projects
           </button>
-          <button
-            hx-get="/contact"
-            hx-swap="innerHTML"
-            hx-target="#content"
-            onclick="closeNav()"
-          >
-            Contact
-          </button>
-          <button class="theme-button" id="themeButton" onclick="toggleTheme()">
-            ☀️
-          </button>
         </div>
       </div>
+      <button class="theme-button" id="themeButton" onclick="toggleTheme()">
+        ☀️
+      </button>
     </div>
     <div
       id="content"
       class="content"
-      hx-get="/about"
+      hx-get="/browse"
       hx-trigger="load"
       hx-swap="innerHTML"
     ></div>
@@ -114,7 +118,7 @@
   </body>
 </html>
 <script>
-  //mobile menu side
+  //mobile menu mobile
   function openNav() {
     document.getElementById("menu").style.display = "flex";
   }
@@ -123,16 +127,16 @@
       document.getElementById("menu").style.display = "none";
     }
   }
-  //mobile project side
-  function openProjectSide() {
-    let state = document.getElementById("side").style.display;
+  //mobile project mobile
+  function openProjectmobile() {
+    let state = document.getElementById("mobile").style.display;
     if (state === "flex")
-      document.getElementById("side").style.display = "none";
-    else document.getElementById("side").style.display = "flex";
+      document.getElementById("mobile").style.display = "none";
+    else document.getElementById("mobile").style.display = "flex";
   }
-  function closeProjectSide() {
+  function closeProjectmobile() {
     if (window.innerWidth <= 480) {
-      document.getElementById("side").style.display = "none";
+      document.getElementById("mobile").style.display = "none";
     }
   }
   //theme
@@ -167,6 +171,24 @@
       button.textContent = "☀️";
     }
   };
+  document.getElementById("meButton").addEventListener("click", function () {
+    fetch("/new-username/tgrangeo", {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error("Erreur lors de la récupération du profil");
+        }
+      })
+      .then((data) => {
+        location.reload();
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
   const linkToGithub = (repo) => {
     const userTitle = document.querySelector(".user-title").textContent;
     const decodedUserTitle = decodeURIComponent(userTitle);
