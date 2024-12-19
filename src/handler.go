@@ -19,7 +19,6 @@ func GetUsername(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetUsername(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL)
 	path := r.URL.Path
 	n := strings.Split(path, "/")[2]
 	username = n
@@ -36,7 +35,6 @@ func ShowBrowse(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowAbout(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(username)
 	readme, err := fetchUserReadme(username)
 	if err != nil {
 		log.Printf("Error fetching user README: %v", err)

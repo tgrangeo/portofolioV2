@@ -150,6 +150,18 @@ img {
   font-size: 18px;
 }
 
+.side-menu-button{
+  border: none;
+  background-color: #ffffff00;
+  color: #ebebeb;
+  font-size: 24px;
+}
+
+.side-menu-button:hover{
+  color: #f1802d;
+  cursor: pointer;
+}
+
 .side button:hover,
 .menu button:hover {
   background: var(--hover);

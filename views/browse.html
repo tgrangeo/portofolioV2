@@ -54,48 +54,45 @@
   }
 </style>
 <div class="browse">
-  <h1>Bienvenue sur le moteur de recherche</h1>
+  <h1>Browse GitHub Profiles</h1>
   <p>
-    Trouvez rapidement les informations que vous recherchez grâce à notre moteur
-    de recherche intuitif.
+    This website serves as a personal portfolio and a GitHub profile viewer,
+    allowing users to explore GitHub profiles and showcase their own projects
+    and skills.
   </p>
   <div class="search-box">
-    <input id="searchInput" type="text" placeholder="Rechercher..." />
-    <button id="searchButton" class="search-button" type="button">
-      Rechercher
-    </button>
+    <input id="searchInput" type="text" placeholder="Type a github pseudo..." />
+    <button id="searchButton" class="search-button" type="button">Find</button>
   </div>
-  <p>Ou consulter simplement mon profil.</p>
+  <p>Quick link to my profile:</p>
   <button id="meButton" class="me-button">me</button>
 </div>
 
 <script>
-	document
-	.getElementById("searchButton")
-	.addEventListener("click", function () {
-	  const input = document.getElementById("searchInput").value;
-	  if (input.trim() !== "") {
-		fetch(`/new-username/${encodeURIComponent(input)}`, {
-		  method: "GET",
-		})
-		  .then((response) => {
-			if (response.ok) {
-			  return response.text(); // Handle response data if needed
-			} else {
-			  throw new Error("Erreur lors de la recherche");
-			}
-		  })
-		  .then(() => {
-			// Reload the page if the request was successful
-			location.reload();
-		
-		  })
-		  .catch((error) => {
-			console.error("Une erreur s'est produite:", error.message);
-		  });
-	  }
-	});
-  
+  document
+    .getElementById("searchButton")
+    .addEventListener("click", function () {
+      const input = document.getElementById("searchInput").value;
+      if (input.trim() !== "") {
+        fetch(`/new-username/${encodeURIComponent(input)}`, {
+          method: "GET",
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw new Error("Erreur lors de la recherche");
+            }
+          })
+          .then(() => {
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Une erreur s'est produite:", error.message);
+          });
+      }
+    });
+
   document.getElementById("meButton").addEventListener("click", function () {
     fetch("/new-username/tgrangeo", {
       method: "GET",

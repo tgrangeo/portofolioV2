@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tgrangeo</title>
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
     <link rel="stylesheet" href="../static/styles.css" />
     <!-- font -->
     <link
@@ -21,20 +22,21 @@
   <body>
     <div class="side-menu-container">
       <div class="side-menu">
-        <h1 class="side-menu-icon">></h1>
+        <img class="side-menu-icon" src="../static/menu.png" width="25" style="margin-left: 10%;margin-top: 20px">
+        <img src="../static/logo_tg.png" width="70" style="margin-left: 10%;margin-top: 20px">
         <ul>
           <li>
-            <button hx-get="/browse" hx-swap="innerHTML" hx-target="#content">
+            <button class="side-menu-button" hx-get="/browse" hx-swap="innerHTML" hx-target="#content">
               Browse
             </button>
           </li>
           <li>
-            <button id="meButton" hx-target="#content">
+            <button class="side-menu-button" id="meButton" hx-target="#content">
               Me
             </button>
           </li>
           <li>
-            <button hx-get="/contact" hx-swap="innerHTML" hx-target="#content">
+            <button class="side-menu-button" hx-get="/contact" hx-swap="innerHTML" hx-target="#content">
               Contact
             </button>
           </li>

@@ -26,6 +26,15 @@ Improve link color
     Markdown Parsing: gomarkdown/markdown library.
     Others: GitHub API, dotenv for environment variables.
 
+**⚙️ Todo**
+[ ] portofolio readme don t work ?!
+[ ] go to about when browse + me button
+[ ] location
+[ ] locale
+[ ] autocomplete github
+[ ] mobile
+
+
 **⚙️ Setup**
 📝 Prerequisites
 
