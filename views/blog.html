@@ -1,0 +1,20 @@
+<div class="blog">
+	<h1>Article List</h1>
+	<ul>
+	  {{range .Articles}}
+	  <li>
+		<button
+		  class="article-button"
+		  hx-get="/article/{{urlquery .Title}}" 
+		  hx-target="#blog" 
+		  hx-swap="innerHTML"
+		  hx-indicator="#loading" 
+		>
+		  {{.Title}}
+		</button>
+	  </li>
+	  {{end}}
+	</ul>
+	<div id="blog"></div> <!-- Ensure this target element exists -->
+	<div id="loading" style="display: none;">Loading...</div>
+</div>

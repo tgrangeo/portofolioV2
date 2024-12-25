@@ -38,6 +38,8 @@ func main() {
 	http.HandleFunc("/profile-picture", src.ProfilePictureHandler)
 	http.HandleFunc("/username", src.GetUsername)
 	http.HandleFunc("/new-username/", src.SetUsername)
+	http.HandleFunc("/blog/", src.ShowBlog)
+	http.HandleFunc("/article/", src.ShowArticle)
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
