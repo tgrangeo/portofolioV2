@@ -19,9 +19,12 @@ func GetUsername(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetUsername(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
-	n := strings.Split(path, "/")[2]
-	username = n
+	_, err := GetProfilePicture(strings.Split(r.URL.Path, "/")[2])
+	if err != nil {
+		w.WriteHeader(404)
+	} else {
+		username = strings.Split(r.URL.Path, "/")[2]
+	}
 }
 
 func ShowBrowse(w http.ResponseWriter, r *http.Request) string {
@@ -38,7 +41,8 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) string {
 	readme, err := fetchUserReadme(username)
 	if err != nil {
 		log.Printf("Error fetching user README: %v", err)
-		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
+		// w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(404)
 		return ""
 	}
 	return string("<div class=\"content-readme\"" + readme + "</div>")
@@ -65,7 +69,7 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) string {
 	return builder.String()
 }
 
-func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string{
+func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string {
 	path := r.URL.Path
 	segments := strings.Split(path, "/")
 	if len(segments) < 3 || segments[2] == "" {

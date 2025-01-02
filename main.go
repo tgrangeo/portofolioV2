@@ -31,7 +31,7 @@ type Data struct {
 
 func middleware(next func(http.ResponseWriter, *http.Request)string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("HX-Request") != "true" {
+		if r.Header.Get("HX-Request") != "true"{
 			data := Data{
 				Content: template.HTML(next(w,r)),
 			}

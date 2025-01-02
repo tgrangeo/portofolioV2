@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/gomarkdown/markdown"
@@ -45,12 +46,17 @@ func initArticles() []Article {
 
 func ShowBlog(w http.ResponseWriter, r *http.Request) string {
 	if r.Header.Get("HX-Request") != "true" {
-		tmpl.ExecuteTemplate(w, "index.html", nil)
+		err := tmpl.ExecuteTemplate(w, "index.html", nil)
+		if err != nil {
+			http.Error(w, "Error rendering index template", http.StatusInternalServerError)
+			return ""
+		}
+		return ""
 	}
 	data := Data{
 		Articles: initArticles(),
 	}
-	tmpl, err := tmpl.ParseFiles("blog.html")
+	tmpl, err := template.ParseFiles("views/blog.html")
 	if err != nil {
 		http.Error(w, "Error parsing template", http.StatusInternalServerError)
 		return ""
@@ -63,6 +69,7 @@ func ShowBlog(w http.ResponseWriter, r *http.Request) string {
 	}
 	return buf.String()
 }
+
 
 func ShowArticle(w http.ResponseWriter, r *http.Request) string {
 	path := strings.TrimPrefix(r.URL.Path, "/article/")

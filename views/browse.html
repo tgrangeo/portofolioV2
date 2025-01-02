@@ -2,6 +2,7 @@
   .browse {
     display: flex;
     flex-direction: column;
+    max-width: 60vw;
     align-items: center;
     justify-content: center;
   }
@@ -54,12 +55,13 @@
   }
 </style>
 <div class="browse">
-  <h1>Browse GitHub Profiles</h1>
+  <h1>Welcome to My Portfolio and GitHub Explorer</h1>
   <p>
-    This website serves as a personal portfolio and a GitHub profile viewer,
-    allowing users to explore GitHub profiles and showcase their own projects
-    and skills.
+    This site serves as both my personal portfolio and a dynamic GitHub profile viewer. Explore my global README to learn about me, or dive into individual project READMEs to see my work in detail.<br><br>
+    Looking for a GitHub profile? Use the search bar above for quick access to any GitHub user's profile, including repositories and project READMEs.<br><br>
+    Start your journey now and discover the open-source world at your fingertips!<br>
   </p>
+  <p id="404" style="color: red; display: none;">account not found</p>
   <div class="search-box">
     <input id="searchInput" type="text" placeholder="Type a github pseudo..." />
     <button id="searchButton" class="search-button" type="button">Find</button>
@@ -67,31 +69,32 @@
   <p>Quick link to my profile:</p>
   <button id="meButton" class="me-button">me</button>
 </div>
-
 <script>
-  document
-    .getElementById("searchButton")
-    .addEventListener("click", function () {
-      const input = document.getElementById("searchInput").value;
-      if (input.trim() !== "") {
-        fetch(`/new-username/${encodeURIComponent(input)}`, {
-          method: "GET",
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.text();
-            } else {
-              throw new Error("Erreur lors de la recherche");
+  document.getElementById("searchButton").addEventListener("click", submit);
+  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+               submit()
             }
-          })
-          .then(() => {
-            location.reload();
-          })
-          .catch((error) => {
-            console.error("Une erreur s'est produite:", error.message);
-          });
-      }
-    });
+        });
+  function submit() {
+    const input = document.getElementById("searchInput").value.trim();
+    if (input === "") {
+      return;
+    }
+    fetch(`/new-username/${encodeURIComponent(input)}`, { method: "GET" })
+      .then((response) => {
+        if (response.status === 200) {
+          document.getElementById("404").style.display = "none"; 
+          window.location.href = "/about"; 
+        } else {
+          document.getElementById("404").style.display = "block"; 
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
+        document.getElementById("404").style.display = "block";
+      });
+  }
 
   document.getElementById("meButton").addEventListener("click", function () {
     fetch("/new-username/tgrangeo", {
