@@ -3,14 +3,15 @@ package src
 import (
 	"crypto/tls"
 	"fmt"
+	"net/http"
 	"os"
 
 	"gopkg.in/gomail.v2"
 )
 
-type SubmitForm struct{
-	name string
-	mail string
+type SubmitForm struct {
+	name    string
+	mail    string
 	message string
 }
 
@@ -54,7 +55,7 @@ var contactTemplateFalse = `
 </form>
 `
 
-func ContactSend(f SubmitForm)bool {
+func ContactSend(f SubmitForm) bool {
 	mail := os.Getenv("MAIL")
 	pass := os.Getenv("PASS_MAIL")
 
@@ -66,9 +67,32 @@ func ContactSend(f SubmitForm)bool {
 	d := gomail.NewDialer("smtp.gmail.com", 587, mail, pass)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	if err := d.DialAndSend(m); err != nil {
-	  fmt.Println(err)
-	  return false
+		fmt.Println(err)
+		return false
 	}
 	return true
-  }
+}
 
+func ContactHandler(w http.ResponseWriter, r *http.Request) string {
+	return contactTemplate
+}
+
+func HandleSubmit(w http.ResponseWriter, r *http.Request) string {
+	if r.Method == http.MethodPost {
+
+		form := SubmitForm{
+			name:    r.FormValue("name"),
+			mail:    r.FormValue("mail"),
+			message: r.FormValue("message"),
+		}
+		w.Header().Set("Content-Type", "text/html")
+		if ContactSend(form) {
+			return contactTemplateSubmitted
+		} else {
+			return contactTemplateFalse
+		}
+		return ""
+	}
+	http.Redirect(w, r, "/contact", http.StatusSeeOther)
+	return ""
+}

@@ -15,7 +15,7 @@ var tmpl *template.Template
 func init() {
 	env := os.Getenv("ENV")
 	log.Printf("Current ENV variable: %s", env)
-	
+
 	if env != "PROD" {
 		err := godotenv.Load()
 		if err != nil {
@@ -25,21 +25,39 @@ func init() {
 	tmpl = template.Must(template.ParseGlob("views/*.html"))
 }
 
+type Data struct {
+	Content template.HTML
+}
+
+func middleware(next func(http.ResponseWriter, *http.Request)string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("HX-Request") != "true" {
+			data := Data{
+				Content: template.HTML(next(w,r)),
+			}
+			tmpl.ExecuteTemplate(w, "index.html", data)
+		}else{
+			w.Write([]byte(next(w, r)))
+		}
+	}
+}
+
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.ExecuteTemplate(w, "index.html", nil)
+		http.Redirect(w, r, "/browse", http.StatusSeeOther)
 	})
-	http.HandleFunc("/contact", src.ContactHandler)
-	http.HandleFunc("/submit", src.HandleSubmit)
-	http.HandleFunc("/projects", src.ShowProjects)
-	http.HandleFunc("/about", src.ShowAbout)
-	http.HandleFunc("/browse", src.ShowBrowse)
-	http.HandleFunc("/readme/", src.ShowProjectReadme)
+	http.HandleFunc("/about", middleware(src.ShowAbout))
+	http.HandleFunc("/contact", middleware(src.ContactHandler))
+	http.HandleFunc("/submit", middleware(src.HandleSubmit))
+	http.HandleFunc("/projects", middleware(src.ShowProjects))
+	http.HandleFunc("/browse", middleware(src.ShowBrowse))
+	http.HandleFunc("/readme/", middleware(src.ShowProjectReadme))
+	http.HandleFunc("/blog", middleware(src.ShowBlog))
+	http.HandleFunc("/article/", middleware(src.ShowArticle))
 	http.HandleFunc("/profile-picture", src.ProfilePictureHandler)
-	http.HandleFunc("/username", src.GetUsername)
+	http.HandleFunc("/username",src.GetUsername)
 	http.HandleFunc("/new-username/", src.SetUsername)
-	http.HandleFunc("/blog/", src.ShowBlog)
-	http.HandleFunc("/article/", src.ShowArticle)
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

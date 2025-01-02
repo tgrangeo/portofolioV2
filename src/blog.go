@@ -1,15 +1,17 @@
 package src
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-
-	// "os"
-	"text/template"
 	"time"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 type Article struct {
@@ -34,47 +36,49 @@ func (a Article) String() string {
 	return "Title: " + a.Title + "\nDate: " + a.PublicationDate.Format("2006-01-02") + "\nPath: " + a.FilePath
 }
 
-func initArticles() []Article{
+func initArticles() []Article {
 	res := []Article{}
 	res = append(res, NewArticle("gitignore", "../static/blog/gitignore.md", time.Now()))
 	res = append(res, NewArticle("htmx_go", "../static/blog/htmx_go.md", time.Now()))
 	return res
 }
 
-func ShowBlog(w http.ResponseWriter, r *http.Request) {
+func ShowBlog(w http.ResponseWriter, r *http.Request) string {
+	if r.Header.Get("HX-Request") != "true" {
+		tmpl.ExecuteTemplate(w, "index.html", nil)
+	}
 	data := Data{
 		Articles: initArticles(),
 	}
-	tmpl, err := template.ParseFiles("views/blog.html")
+	tmpl, err := tmpl.ParseFiles("blog.html")
 	if err != nil {
 		http.Error(w, "Error parsing template", http.StatusInternalServerError)
-		return
+		return ""
 	}
-	tmpl.Execute(w, data)
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, data)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return ""
+	}
+	return buf.String()
 }
 
-func ShowArticle(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("article")
-	
-	// Extract and sanitize the article title
+func ShowArticle(w http.ResponseWriter, r *http.Request) string {
 	path := strings.TrimPrefix(r.URL.Path, "/article/")
 	title := strings.TrimSpace(path)
-	title = filepath.Clean(title) // Prevent directory traversal
-
-	// Build the file path
-	filePath := filepath.Join("./static/articles/", title + ".md")
-
-	// Open the file
-	art, err := os.ReadFile(filePath) // Read entire file content
+	title = filepath.Clean(title)
+	filePath := filepath.Join("./static/articles/", title+".md")
+	art, err := os.ReadFile(filePath)
 	if err != nil {
 		http.Error(w, "Article not found", http.StatusNotFound)
 		fmt.Println("Error opening file:", err)
-		return
+		return ""
 	}
-
-	// Write the response
-	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(`<div class="content-readme">`))
-	w.Write([]byte(art))
-	w.Write([]byte(`</div>`))
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	mdParser := parser.NewWithExtensions(extensions)
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	renderer := html.NewRenderer(html.RendererOptions{Flags: htmlFlags})
+	md := markdown.ToHTML(art, mdParser, renderer)
+	return string(`<div class="content-readme">` + string(md) + `</div>`)
 }

@@ -24,38 +24,33 @@ func SetUsername(w http.ResponseWriter, r *http.Request) {
 	username = n
 }
 
-func ShowBrowse(w http.ResponseWriter, r *http.Request) {
+func ShowBrowse(w http.ResponseWriter, r *http.Request) string {
 	htmlFile, err := os.ReadFile("views/browse.html")
 	if err != nil {
 		http.Error(w, "Unable to read HTML file", http.StatusInternalServerError)
-		return
+		return ""
 	}
 	w.Header().Set("Content-Type", "text/html")
-	w.Write(htmlFile)
+	return string(htmlFile)
 }
 
-func ShowAbout(w http.ResponseWriter, r *http.Request) {
+func ShowAbout(w http.ResponseWriter, r *http.Request) string {
 	readme, err := fetchUserReadme(username)
 	if err != nil {
 		log.Printf("Error fetching user README: %v", err)
 		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
-		return
+		return ""
 	}
-	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte("<div class=\"content-readme\""))
-	w.Write([]byte(readme))
-	w.Write([]byte("</div>"))
+	return string("<div class=\"content-readme\"" + readme + "</div>")
 }
 
-func ShowProjects(w http.ResponseWriter, r *http.Request) {
+func ShowProjects(w http.ResponseWriter, r *http.Request) string {
 	repos, err := getRepos(username)
 	if err != nil {
 		log.Printf("Error fetching repos : %v", err)
 		http.Error(w, fmt.Sprintf("Error fetching repos: %v", err), http.StatusInternalServerError)
-		return
+		return ""
 	}
-
-	// Generate HTML for each repo
 	var builder strings.Builder
 	builder.WriteString("<div class=\"projects\"><button class=\"side-project-button\" onClick=\"openProjectSide()\">Select a project</button>")
 
@@ -66,18 +61,16 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) {
 	builder.WriteString("</ul></div>")
 	builder.WriteString("<div id=\"project-readme\">select a project to begin</div>")
 	builder.WriteString("</div>")
-
-	// Write HTML to response
 	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(builder.String()))
+	return builder.String()
 }
 
-func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
+func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string{
 	path := r.URL.Path
 	segments := strings.Split(path, "/")
 	if len(segments) < 3 || segments[2] == "" {
 		http.Error(w, "Name parameter is required", http.StatusBadRequest)
-		return
+		return ""
 	}
 	name := segments[2]
 
@@ -85,10 +78,10 @@ func ShowProjectReadme(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Error fetching repo README: %v", err)
 		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
-		return
+		return ""
 	}
 	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(readme))
+	return readme
 }
 
 func ProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
@@ -101,28 +94,4 @@ func ProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	builder.WriteString(fmt.Sprintf("<img class=\"profile-picture\" id=\"profile-picture\" width=\"70px\" src=\"%s\" alt=\"Profile\" disabled>", avatarURL))
 	w.Write([]byte(builder.String()))
-}
-
-func ContactHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(contactTemplate))
-}
-
-func HandleSubmit(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-
-		form := SubmitForm{
-			name:    r.FormValue("name"),
-			mail:    r.FormValue("mail"),
-			message: r.FormValue("message"),
-		}
-		w.Header().Set("Content-Type", "text/html")
-		if ContactSend(form) {
-			w.Write([]byte(contactTemplateSubmitted))
-		} else {
-			w.Write([]byte(contactTemplateFalse))
-		}
-		return
-	}
-	http.Redirect(w, r, "/contact", http.StatusSeeOther)
 }

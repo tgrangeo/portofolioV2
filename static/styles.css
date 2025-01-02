@@ -320,13 +320,6 @@ ul {
   display: none;
 }
 
-/* #project-readme {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-} */
-
 @media screen and (min-height: 450px) {
   .mobile-side-menu {
     display: none;

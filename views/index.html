@@ -26,7 +26,7 @@
         <img src="../static/logo_tg.png" width="70" style="margin-left: 10%;margin-top: 20px">
         <ul>
           <li>
-            <button class="side-menu-button" hx-get="/browse" hx-swap="innerHTML" hx-target="#content">
+            <button class="side-menu-button" hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
               Browse
             </button>
           </li>
@@ -36,12 +36,12 @@
             </button>
           </li>
           <li>
-            <button class="side-menu-button" hx-get="/blog" hx-swap="innerHTML" hx-target="#content">
+            <button class="side-menu-button" hx-get="/blog" hx-swap="innerHTML" hx-target="#content" hx-push-url="blog">
               Blog
             </button>
           </li>
           <li>
-            <button class="side-menu-button" hx-get="/contact" hx-swap="innerHTML" hx-target="#content">
+            <button class="side-menu-button" hx-get="/contact" hx-swap="innerHTML" hx-target="#content" hx-push-url="contact">
               Contact
             </button>
           </li>
@@ -49,7 +49,6 @@
       </div>
     </div>
     <div id="header" class="header">
-      <!-- <span class="mobile-mobile-menu" onClick="openNav()">&#9776;</span> -->
       <div>
         <div class="user-title">
           <div
@@ -86,6 +85,7 @@
         <div class="mobile-menu-div">
           <button
             hx-get="/about"
+            hx-push-url="/about" 
             hx-swap="innerHTML"
             hx-target="#content"
             onclick="closeNav()"
@@ -94,6 +94,7 @@
           </button>
           <button
             hx-get="/projects"
+            hx-push-url="/projects" 
             hx-swap="innerHTML"
             hx-target="#content"
             onclick="closeNav()"
@@ -109,10 +110,10 @@
     <div
       id="content"
       class="content"
-      hx-get="/browse"
-      hx-trigger="load"
-      hx-swap="innerHTML"
-    ></div>
+      >{{.Content}}</div>
+      <!-- hx-trigger="load" -->
+      <!-- hx-swap="innerHTML" -->
+      <!-- hx-get="/browse" -->
     <div class="footer">
       <a href="https://github.com/tgrangeo" class="copyright"
         ><img
@@ -146,7 +147,6 @@
       document.getElementById("mobile").style.display = "none";
     }
   }
-  //theme
   const toggleTheme = () => {
     const html = document.querySelector("html");
     const button = document.getElementById("themeButton");
