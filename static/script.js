@@ -1,24 +1,5 @@
-  //mobile menu side
-  function openNav() {
-    document.getElementById("menu").style.display = "flex";
-  }
-  function closeNav() {
-    if (window.innerWidth <= 480) {
-      document.getElementById("menu").style.display = "none";
-    }
-  }
-  //mobile project side
-  function openProjectSide() {
-    let state = document.getElementById("side").style.display;
-    if (state === "flex")
-      document.getElementById("side").style.display = "none";
-    else document.getElementById("side").style.display = "flex";
-  }
-  function closeProjectSide() {
-    if (window.innerWidth <= 480) {
-      document.getElementById("side").style.display = "none";
-    }
-  }
+  
+
   //theme
   const toggleTheme = () => {
     const html = document.querySelector("html");

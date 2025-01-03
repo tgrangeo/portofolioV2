@@ -139,7 +139,22 @@ img {
   flex-direction: row;
 }
 
-.side button,
+
+
+.side button{
+  padding: 5px;
+  margin-bottom: 0.5vh;
+  border: none;
+  color: var(--color);
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 12vw;
+}
+
 .menu button {
   padding: 5px;
   margin-bottom: 0.5vh;
@@ -148,6 +163,7 @@ img {
   background: none;
   cursor: pointer;
   font-size: 18px;
+
 }
 
 .side-menu-button{
@@ -186,6 +202,13 @@ ul {
 #project-readme {
   width: 70vw;
   margin-right: 5vw;
+}
+
+#projects-default{
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 30vh;
 }
 
 .theme-button {
@@ -318,210 +341,4 @@ ul {
 
 .side-project-button {
   display: none;
-}
-
-@media screen and (min-height: 450px) {
-  .mobile-side-menu {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .mobile-side-menu {
-    font-size: 30px;
-    display: block;
-    cursor: pointer;
-  }
-
-  .menu {
-    display: none;
-  }
-
-  .header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .header img {
-    margin: 0 auto 10px;
-  }
-
-  .header button {
-    font-size: 18px;
-    margin: 5px 0;
-  }
-
-  .projects {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .side {
-    /* width: 100%; */
-    margin-bottom: 20px;
-  }
-
-  #project-readme {
-    width: 100%;
-    margin: 0;
-  }
-
-  .contactForm {
-    width: 90%;
-    padding: 15px;
-  }
-
-  .contactForm input[type="text"],
-  .contactForm input[type="email"],
-  .contactForm textarea {
-    font-size: 16px;
-  }
-
-  .contactButton {
-    font-size: 16px;
-  }
-
-  .footer {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer .copyright {
-    font-size: 12px;
-  }
-
-  .footer .copyright img {
-    margin-bottom: 0;
-  }
-}
-
-.closebtn {
-  display: none;
-}
-
-@media (max-width: 480px) {
-  #profile-picture {
-    display: none;
-  }
-  #username-form {
-    display: none;
-  }
-
-  .side-project-button {
-    display: flex;
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 18px;
-    margin: 8px;
-  }
-
-  #project-readme {
-    max-width: 90%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-
-  .projects {
-    flex-direction: column;
-    width: 90vw;
-  }
-
-  .side {
-    display: none;
-    border: var(--color) 1px solid;
-    border-radius: 15px;
-  }
-
-  .content-readme {
-    width: 90vw;
-  }
-
-  .mobile-side-menu {
-    display: block;
-    position: absolute;
-    top: 20px;
-    left: 25px;
-    font-size: 48px;
-  }
-
-  .header {
-    flex-direction: row;
-    justify-content: center;
-  }
-  /* menu */
-
-  .menu button {
-    font-size: 32px;
-    width: 80vw;
-  }
-
-  .mobile-menu-div {
-    margin-top: 30px;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .menu {
-    font-size: 32px;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: var(--background-color);
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-  }
-
-  .menu a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-  }
-
-  .menu a:hover {
-    color: var(--hover);
-  }
-
-  .menu .closebtn {
-    display: block;
-    position: absolute;
-    top: 20px;
-    left: 25px;
-    font-size: 48px;
-    color: var(--color);
-  }
-
-  .menu .closebtn:hover {
-    color: var(--hover);
-  }
-
-  /* end menu */
-
-  body {
-    font-size: 16px;
-  }
-
-  .contactForm input[type="text"],
-  .contactForm input[type="email"],
-  .contactForm textarea {
-    font-size: 14px;
-  }
-
-  .contactButton {
-    font-size: 14px;
-  }
 }

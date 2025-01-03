@@ -41,9 +41,8 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) string {
 	readme, err := fetchUserReadme(username)
 	if err != nil {
 		log.Printf("Error fetching user README: %v", err)
-		// w.WriteHeader(http.StatusNotFound)
-		w.WriteHeader(404)
-		return ""
+		default_user_readme, _ := os.ReadFile("views/default_user_readme.html")
+		return string(default_user_readme)
 	}
 	return string("<div class=\"content-readme\"" + readme + "</div>")
 }
@@ -60,10 +59,10 @@ func ShowProjects(w http.ResponseWriter, r *http.Request) string {
 
 	builder.WriteString("<div id=\"side\" class=\"side\"><ul>")
 	for _, repo := range repos {
-		builder.WriteString(fmt.Sprintf(`<li><button onclick="closeProjectSide()" hx-get="/readme/%s" hx-target="#project-readme" hx-swap="innerHTML">%s</button><button onclick="linkToGithub('%s')"><img class="github-icon" src="../static/github-black.png" width="18px" /></button></li>`, repo, repo, repo))
+		builder.WriteString(fmt.Sprintf(`<li><button class="project-button" onclick="closeProjectSide()" hx-get="/readme/%s" hx-target="#project-readme" hx-swap="innerHTML">%s</button><button onclick="linkToGithub('%s')"><img class="github-icon" src="../static/github-black.png" width="18px" /></button></li>`, repo, repo, repo))
 	}
 	builder.WriteString("</ul></div>")
-	builder.WriteString("<div id=\"project-readme\">select a project to begin</div>")
+	builder.WriteString("<div id=\"project-readme\"><div id=\"projects-default\">⬅️ please select a project to begin</div></div>")
 	builder.WriteString("</div>")
 	w.Header().Set("Content-Type", "text/html")
 	return builder.String()

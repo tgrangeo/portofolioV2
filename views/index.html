@@ -50,7 +50,7 @@
     </div>
     <div id="header" class="header">
       <div>
-        <div class="user-title">
+        <div class="user-title"  hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
           <div
             id="profile-picture-container"
             hx-get="/profile-picture"
@@ -79,16 +79,11 @@
         </div>
       </div>
       <div class="menu" id="menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
-          >&times;</a
-        >
-        <div class="mobile-menu-div">
           <button
             hx-get="/about"
             hx-push-url="/about" 
             hx-swap="innerHTML"
             hx-target="#content"
-            onclick="closeNav()"
           >
             About
           </button>
@@ -97,11 +92,9 @@
             hx-push-url="/projects" 
             hx-swap="innerHTML"
             hx-target="#content"
-            onclick="closeNav()"
           >
             Projects
           </button>
-        </div>
       </div>
       <button class="theme-button" id="themeButton" onclick="toggleTheme()">
         ☀️
@@ -111,42 +104,18 @@
       id="content"
       class="content"
       >{{.Content}}</div>
-      <!-- hx-trigger="load" -->
-      <!-- hx-swap="innerHTML" -->
-      <!-- hx-get="/browse" -->
     <div class="footer">
       <a href="https://github.com/tgrangeo" class="copyright"
         ><img
           src="../static/github-black.png"
           class="github-icon"
           width="20px"
-        />tgrangeo ©2024</a
+        />tgrangeo ©2025</a
       >
     </div>
   </body>
 </html>
 <script>
-  //mobile menu mobile
-  function openNav() {
-    document.getElementById("menu").style.display = "flex";
-  }
-  function closeNav() {
-    if (window.innerWidth <= 480) {
-      document.getElementById("menu").style.display = "none";
-    }
-  }
-  //mobile project mobile
-  function openProjectmobile() {
-    let state = document.getElementById("mobile").style.display;
-    if (state === "flex")
-      document.getElementById("mobile").style.display = "none";
-    else document.getElementById("mobile").style.display = "flex";
-  }
-  function closeProjectmobile() {
-    if (window.innerWidth <= 480) {
-      document.getElementById("mobile").style.display = "none";
-    }
-  }
   const toggleTheme = () => {
     const html = document.querySelector("html");
     const button = document.getElementById("themeButton");
