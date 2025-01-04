@@ -1,0 +1,124 @@
+html{
+    background: #101010;
+    color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+}
+
+body{
+    width: 90vw;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.5vh;
+}
+
+.side-menu{
+    width: 5vw;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ul {
+        margin-top: 5vh;
+        list-style-type: none;
+        button {
+            width: 75px;
+            height: 30px;
+            transition: all 0.3s ease-out allow-discrete;
+            height: 5vh;
+            min-width: 3vw;
+            margin-bottom: 0.6vh;
+            border-radius: 15px;
+            border: none;
+            background: none;
+            img {
+                width: 32px;
+            }
+            .text {
+                display: none;
+                white-space: nowrap;
+                font-size: 18px;
+            }
+        }
+        button:hover{
+            background-color: #f8f8f8;
+            .text{
+                display: block;
+            }
+            img{
+                display: none;
+            }
+        }
+      }
+      .line {
+        transition: all 0.5s ease-out allow-discrete;
+        width: 2px;
+        height: 80%;
+        margin-left: 40px;
+        background-color: #f8f8f8;
+        transform: translateX(-50%);
+      }
+}
+
+.page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .header{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        width: 90vw;
+        margin-top: 3vh;
+        height: 15vh;
+    }
+    .theme-button:active {
+        transform: scale(0.9);
+      }
+      
+      .profile-picture {
+        border-radius: 50%;
+        border: 2px solid #f8f8f8;
+        width: 70px;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      .user-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .user-title * {
+        margin-right: 0.5vw !important;
+      }
+
+      .content-readme {
+        width: 60vw;
+      }
+
+      .menu{
+        padding: 20px;
+      }
+
+      .menu button {
+        padding: 5px;
+        margin-bottom: 0.5vh;
+        border: none;
+        color: var(--color);
+        background: none;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+        transition: all 0.3s ease-out allow-discrete;
+        border-radius: 15px;
+      }
+      .menu button:hover {
+        background: #f8f8f8;
+        color: #101010;
+      }
+}

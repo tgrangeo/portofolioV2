@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tgrangeo</title>
     <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
-    <link rel="stylesheet" href="../static/styles.css" />
+    <link rel="stylesheet" href="../static/styles/index.css" />
     <!-- font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
@@ -18,36 +18,36 @@
       crossorigin="anonymous"
     ></script>
   </head>
-
   <body>
-    <div class="side-menu-container">
-      <div class="side-menu">
-        <img class="side-menu-icon" src="../static/menu.png" width="25" style="margin-left: 10%;margin-top: 20px">
-        <img src="../static/logo_tg.png" width="70" style="margin-left: 10%;margin-top: 20px">
-        <ul>
-          <li>
-            <button class="side-menu-button" hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
-              Browse
-            </button>
-          </li>
-          <li>
-            <button class="side-menu-button" id="meButton" hx-target="#content">
-              Me
-            </button>
-          </li>
-          <!-- <li>
-            <button class="side-menu-button" hx-get="/blog" hx-swap="innerHTML" hx-target="#content" hx-push-url="blog">
-              Blog
-            </button>
-          </li> -->
-          <li>
-            <button class="side-menu-button" hx-get="/contact" hx-swap="innerHTML" hx-target="#content" hx-push-url="contact">
-              Contact
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <div class="side-menu">
+      <ul>
+        <li>
+          <button class="side-menu-button" hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
+            <img src="../static/images/browse.png"/>
+            <div class="text">Browse</div>
+          </button>
+        </li>
+        <li>
+          <button class="side-menu-button" id="meButton" hx-target="#content">
+            <img src="../static/images/me.png"/>
+            <div class="text">Me</div>
+          </button>
+        </li>
+        <!-- <li>
+          <button class="side-menu-button" hx-get="/blog" hx-swap="innerHTML" hx-target="#content" hx-push-url="blog">
+            Blog
+          </button>
+        </li> -->
+        <li>
+          <button class="side-menu-button" hx-get="/contact" hx-swap="innerHTML" hx-target="#content" hx-push-url="contact">
+            <img src="../static/images/email.png"/>
+            <div class="text">Contact</div>
+          </button>
+        </li>
+      </ul>
+      <div class="line"></div>
+  </div>
+  <div class="page">
     <div id="header" class="header">
       <div>
         <div class="user-title"  hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
@@ -96,9 +96,6 @@
             Projects
           </button>
       </div>
-      <button class="theme-button" id="themeButton" onclick="toggleTheme()">
-        ☀️
-      </button>
     </div>
     <div
       id="content"
@@ -113,40 +110,10 @@
         />tgrangeo ©2025</a
       >
     </div>
+  </div>
   </body>
 </html>
 <script>
-  const toggleTheme = () => {
-    const html = document.querySelector("html");
-    const button = document.getElementById("themeButton");
-    const isLight = html.classList.contains("light-theme");
-    if (isLight) {
-      html.classList.remove("light-theme");
-      html.classList.add("dark-theme");
-      button.textContent = "🌙";
-      localStorage.setItem("theme", "dark");
-    } else {
-      html.classList.remove("dark-theme");
-      html.classList.add("light-theme");
-      button.textContent = "☀️";
-      localStorage.setItem("theme", "light");
-    }
-  };
-  const setThemeOnLoad = () => {
-    const theme = localStorage.getItem("theme");
-    const html = document.querySelector("html");
-    const button = document.getElementById("themeButton");
-
-    if (theme === "dark") {
-      html.classList.remove("light-theme");
-      html.classList.add("dark-theme");
-      button.textContent = "🌙";
-    } else {
-      html.classList.remove("dark-theme");
-      html.classList.add("light-theme");
-      button.textContent = "☀️";
-    }
-  };
   document.getElementById("meButton").addEventListener("click", function () {
     fetch("/new-username/tgrangeo", {
       method: "GET",
