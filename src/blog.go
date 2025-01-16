@@ -21,7 +21,7 @@ type Article struct {
 	FilePath        string
 }
 
-type Data struct {
+type Blog_Data struct {
 	Articles []Article
 }
 
@@ -53,7 +53,7 @@ func ShowBlog(w http.ResponseWriter, r *http.Request) string {
 		}
 		return ""
 	}
-	data := Data{
+	data := Blog_Data{
 		Articles: initArticles(),
 	}
 	tmpl, err := template.ParseFiles("views/blog.html")

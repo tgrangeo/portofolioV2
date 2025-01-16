@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light-theme">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,8 +17,12 @@
       integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
       crossorigin="anonymous"
     ></script>
+    <!-- background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
   </head>
   <body>
+    <div  id="vanta-background" style="z-index:-99; height: 100vh; width: 100%; position: absolute;"></div>
   <div class="side-menu">
       <ul>
         <li>
@@ -96,20 +100,12 @@
             Projects
           </button>
       </div>
+      <div></div>
     </div>
     <div
       id="content"
       class="content"
       >{{.Content}}</div>
-    <div class="footer">
-      <a href="https://github.com/tgrangeo" class="copyright"
-        ><img
-          src="../static/github-black.png"
-          class="github-icon"
-          width="20px"
-        />tgrangeo ©2025</a
-      >
-    </div>
   </div>
   </body>
 </html>
@@ -140,5 +136,16 @@
 
     window.open(`https://github.com/${username}/${repo}`, "_blank");
   };
-  document.addEventListener("DOMContentLoaded", setThemeOnLoad);
-</script>
+  VANTA.NET({
+    el: "html",
+    mouseControls: false,
+    touchControls: false,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    scale: 0.40,
+    scaleMobile: 1.00,
+    color: 0x373737,
+    backgroundColor: 0x90909
+  })
+  </script>

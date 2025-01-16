@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="../static/styles/projects.css" />
+<div class="projects">
+    <ul>
+        {{range .Projects}}
+        <li>
+            <button onclick="linkToGithub('{{.Title}}')">
+                <img class="github-icon" src="../static/images/github-white.png" width="28px" />
+            </button>
+            <button class="project-button" onclick="closeProjectSide()" 
+                    hx-get="/readme/{{.Title}}" hx-push-url="{{.Title}}" 
+                    hx-target="#content" hx-swap="innerHTML">
+                {{.Title}}
+            </button>
+            <p>{{.Desc}}</p>
+            <p style="border-radius:10px; width: fit-content ; padding:3px; border: 1px solid white ">{{.Lang}}</p>
+        </li>
+        {{end}}
+    </ul>
+</div>

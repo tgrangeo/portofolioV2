@@ -53,9 +53,36 @@
   .me-button:hover {
     background-color: #218838;
   }
+
+  /* Cursor */
+.cursor{
+  position: relative;
+  width: 24em;
+  margin: 0 auto;
+  border-right: 2px solid rgba(255,255,255,.75);
+  font-size: 4.8vw;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  transform: translateY(-50%);    
+}
+/* Animation */
+.typewriter-animation {
+animation: 
+  typewriter 5s steps(50) 1s 1 normal both, 
+  blinkingCursor 500ms steps(50) infinite normal;
+}
+@keyframes typewriter {
+from { width: 0; }
+to { width: 90%; }
+}
+@keyframes blinkingCursor{
+from { border-right-color: rgba(255,255,255,.75); }
+to { border-right-color: transparent; }
+}
 </style>
 <div class="browse">
-  <h1>Welcome to My Portfolio and GitHub Explorer</h1>
+  <h1 class="cursor typewriter-animation">Welcome to My Portfolio and GitHub Explorer</h1>
   <p>
     This site serves as both my personal portfolio and a dynamic GitHub profile viewer. Explore my global README to learn about me, or dive into individual project READMEs to see my work in detail.<br><br>
     Looking for a GitHub profile? Use the search bar above for quick access to any GitHub user's profile, including repositories and project READMEs.<br><br>
@@ -95,3 +122,4 @@
       });
   }
 </script>
+

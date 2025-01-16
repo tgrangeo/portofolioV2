@@ -47,46 +47,6 @@ func ShowAbout(w http.ResponseWriter, r *http.Request) string {
 	return string("<div class=\"content-readme\"" + readme + "</div>")
 }
 
-func ShowProjects(w http.ResponseWriter, r *http.Request) string {
-	repos, err := getRepos(username)
-	if err != nil {
-		log.Printf("Error fetching repos : %v", err)
-		http.Error(w, fmt.Sprintf("Error fetching repos: %v", err), http.StatusInternalServerError)
-		return ""
-	}
-	var builder strings.Builder
-	builder.WriteString("<div class=\"projects\"><button class=\"side-project-button\" onClick=\"openProjectSide()\">Select a project</button>")
-
-	builder.WriteString("<div id=\"side\" class=\"side\"><ul>")
-	for _, repo := range repos {
-		builder.WriteString(fmt.Sprintf(`<li><button class="project-button" onclick="closeProjectSide()" hx-get="/readme/%s" hx-target="#project-readme" hx-swap="innerHTML">%s</button><button onclick="linkToGithub('%s')"><img class="github-icon" src="../static/github-black.png" width="18px" /></button></li>`, repo, repo, repo))
-	}
-	builder.WriteString("</ul></div>")
-	builder.WriteString("<div id=\"project-readme\"><div id=\"projects-default\">⬅️ please select a project to begin</div></div>")
-	builder.WriteString("</div>")
-	w.Header().Set("Content-Type", "text/html")
-	return builder.String()
-}
-
-func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string {
-	path := r.URL.Path
-	segments := strings.Split(path, "/")
-	if len(segments) < 3 || segments[2] == "" {
-		http.Error(w, "Name parameter is required", http.StatusBadRequest)
-		return ""
-	}
-	name := segments[2]
-
-	readme, err := fetchRepoReadme(username, name)
-	if err != nil {
-		log.Printf("Error fetching repo README: %v", err)
-		http.Error(w, fmt.Sprintf("Error fetching README: %v", err), http.StatusInternalServerError)
-		return ""
-	}
-	w.Header().Set("Content-Type", "text/html")
-	return readme
-}
-
 func ProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 	avatarURL, err := GetProfilePicture(username)
 	if err != nil {

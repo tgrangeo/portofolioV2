@@ -23,10 +23,12 @@ type GitHubFileContent struct {
 
 type GitHubRepo struct {
 	Name     string `json:"name"`
+	Lang     string `json:"language"`
+	Color    string `json:"color"` 
+	Desc     string `json:"description"`
 	PushedAt string `json:"pushed_at"`
 }
 
-// RepoNameAndDate holds the repo name and parsed date for sorting
 type RepoNameAndDate struct {
 	Name     string
 	PushedAt time.Time
@@ -34,6 +36,77 @@ type RepoNameAndDate struct {
 
 type GitHubUser struct {
 	AvatarURL string `json:"avatar_url"`
+}
+
+func getRepos(user string) ([]Project, error) {
+	url := fmt.Sprintf("https://api.github.com/users/%s/repos", user)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	token := os.Getenv("GITHUB_TOKEN")
+	if token != "" {
+		req.Header.Set("Authorization", "token "+token)
+	}
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching repos: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+	var repos []GitHubRepo
+	err = json.Unmarshal(body, &repos)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
+	}
+	var repoNamesAndDates []RepoNameAndDate
+	var wg sync.WaitGroup
+	for _, repo := range repos {
+		wg.Add(1)
+		go func(repo GitHubRepo) {
+			defer wg.Done()
+			if hasReadme(user, repo.Name) {
+				pushedAt, err := time.Parse(time.RFC3339, repo.PushedAt)
+				if err != nil {
+					log.Printf("Error parsing time for repo %s: %v", repo.Name, err)
+					return
+				}
+				repoNamesAndDates = append(repoNamesAndDates, RepoNameAndDate{
+					Name:     repo.Name,
+					PushedAt: pushedAt,
+				})
+			}
+		}(repo)
+	}
+	wg.Wait()
+
+	sort.Slice(repoNamesAndDates, func(i, j int) bool {
+		return repoNamesAndDates[i].PushedAt.After(repoNamesAndDates[j].PushedAt)
+	})
+
+	var projects []Project
+	for _, repoNameAndDate := range repoNamesAndDates {
+		for _, repo := range repos {
+			if repo.Name == repoNameAndDate.Name {
+				project := Project{
+					Title: repo.Name,
+					Lang:  repo.Lang,
+					Desc:  repo.Desc,
+				}
+				projects = append(projects, project)
+				break
+			}
+		}
+	}
+
+	return projects, nil
 }
 
 func GetProfilePicture(username string) (string, error) {
@@ -65,78 +138,6 @@ func GetProfilePicture(username string) (string, error) {
 		return "", fmt.Errorf("error decoding response: %w", err)
 	}
 	return user.AvatarURL, nil
-}
-
-func getRepos(user string) ([]string, error) {
-	url := fmt.Sprintf("https://api.github.com/users/%s/repos", user)
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-
-	token := os.Getenv("GITHUB_TOKEN")
-	if token != "" {
-		req.Header.Set("Authorization", "token "+token)
-	}
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("error fetching repos: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %w", err)
-	}
-
-	var repos []GitHubRepo
-	err = json.Unmarshal(body, &repos)
-	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling response: %w", err)
-	}
-
-	var repoNamesAndDates []RepoNameAndDate
-	var repoNamesAndDatesMutex sync.Mutex
-	var wg sync.WaitGroup
-
-	for _, repo := range repos {
-		wg.Add(1)
-		go func(repo GitHubRepo) {
-			defer wg.Done()
-			if hasReadme(user, repo.Name) {
-				pushedAt, err := time.Parse(time.RFC3339, repo.PushedAt)
-				if err != nil {
-					log.Printf("Error parsing time for repo %s: %v", repo.Name, err)
-					return
-				}
-				repoNamesAndDatesMutex.Lock()
-				repoNamesAndDates = append(repoNamesAndDates, RepoNameAndDate{
-					Name:     repo.Name,
-					PushedAt: pushedAt,
-				})
-				repoNamesAndDatesMutex.Unlock()
-			}
-		}(repo)
-	}
-
-	wg.Wait()
-
-	sort.Slice(repoNamesAndDates, func(i, j int) bool {
-		return repoNamesAndDates[i].PushedAt.After(repoNamesAndDates[j].PushedAt)
-	})
-
-	repoNames := make([]string, len(repoNamesAndDates))
-	for i, repo := range repoNamesAndDates {
-		repoNames[i] = repo.Name
-	}
-
-	return repoNames, nil
 }
 
 func hasReadme(username, repo string) bool {
