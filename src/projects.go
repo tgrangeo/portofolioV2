@@ -59,5 +59,5 @@ func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string {
 		return ""
 	}
 	w.Header().Set("Content-Type", "text/html")
-	return readme
+	return string("<div class=\"content-readme\"" + readme + "</div>")
 }

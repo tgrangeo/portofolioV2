@@ -114,10 +114,18 @@ body{
 
       .content-readme{
         width: 60vw;
+        img {
+          max-width:100%;
+        };
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding: 3vh;
+        border-radius: 15px;
+        box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+        position: relative;
+        backdrop-filter: blur(5px) ;
       }
 
       .menu button {
