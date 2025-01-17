@@ -2,15 +2,45 @@
 <div class="projects">
     <ul>
         {{range .Projects}}
-        <li  hx-get="/readme/{{.Title}}" hx-push-url="{{.Title}}" 
-        hx-target="#content" hx-swap="innerHTML">
-            <button onclick="linkToGithub('{{.Title}}')">
+        <li hx-get="/readme/{{.Title}}" hx-push-url="{{.Title}}" 
+            hx-target="#content" hx-swap="innerHTML">
+            <button onclick="event.stopPropagation();linkToGithub('{{.Title}}')">
                 <img class="github-icon" src="../static/images/github-white.png" width="28px" />
             </button>
-                {{.Title}}
+            {{.Title}}
+            {{if ne .Desc ""}}
             <p>{{.Desc}}</p>
-            <p style="border-radius:10px; width: fit-content ; padding:3px; border: 1px solid white ">{{.Lang}}</p>
+            {{end}}
+            <div class="lang-list">
+              {{range .Lang}}
+              <p class="language" style="border-radius:10px; width: fit-content; font-size:12px; padding:5px; border: 1.5px solid white">
+                {{.}}
+              </p>
+              {{end}}
+            </div>
         </li>
-        {{end}}
+        {{end}} 
     </ul>
 </div>
+<script>
+    const linkToGithub = (repo) => {
+    const userTitle = document.querySelector(".user-title").textContent;
+    const decodedUserTitle = decodeURIComponent(userTitle);
+    const username = decodedUserTitle.trim();
+
+    window.open(`https://github.com/${username}/${repo}`, "_blank");
+  };
+    async function applyLanguageColors() {
+      const response = await fetch("/static/colors.json"); 
+      const languages = await response.json();
+      document.querySelectorAll(".language").forEach((element) => {
+        const lang = element.textContent.trim();
+        const color = languages[lang]?.color || "#FFFFFF";
+        element.style.borderColor = color;
+        element.style.color = color;
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", applyLanguageColors);
+    document.body.addEventListener("htmx:afterSettle", applyLanguageColors);
+</script>

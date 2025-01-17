@@ -33,7 +33,6 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJRPP7L9"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-    <div  id="vanta-background" style="z-index:-99; height: 100vh; width: 100%; position: absolute;"></div>
   <div class="side-menu">
       <ul>
         <li>
@@ -140,13 +139,6 @@
         alert(error.message);
       });
   });
-  const linkToGithub = (repo) => {
-    const userTitle = document.querySelector(".user-title").textContent;
-    const decodedUserTitle = decodeURIComponent(userTitle);
-    const username = decodedUserTitle.trim();
-
-    window.open(`https://github.com/${username}/${repo}`, "_blank");
-  };
   VANTA.NET({
     el: "html",
     mouseControls: false,
@@ -159,4 +151,4 @@
     color: 0x373737,
     backgroundColor: 0x90909
   })
-  </script>
+</script>

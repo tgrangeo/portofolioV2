@@ -1,5 +1,8 @@
 .projects {
     font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     button {
         background: none;
         border: none;
@@ -23,7 +26,7 @@
         min-width: 18vw;
         backdrop-filter: blur(5px) ;
         background-color: transparent;
-        border: 1px solid white;
+        border: 2px solid white;
         border-radius: 15px;
         padding: 10px;
         margin: 1vh;
@@ -33,5 +36,18 @@
     li:hover {
         transform: scale(1.1);
         box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .lang-list{
+        display: flex;
+        flex-direction:row;
+        padding-top: 3px;
+    }
+    .language{
+        border-radius:5px; 
+        width: fit-content; 
+        font-size:12px;
+        margin: 3px;
+        border: 1.5px solid white
     }
 }

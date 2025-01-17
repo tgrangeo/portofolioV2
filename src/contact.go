@@ -16,6 +16,7 @@ type SubmitForm struct {
 }
 
 var contactTemplate = `
+<link rel="stylesheet" href="../static/styles/contact.css" />
 <h1>Contact Me</h1>
 <form id="contactForm" class="contactForm" hx-post="/submit" hx-swap="innerHTML" hx-target="#content">
 	<label for="name">Name:</label>
@@ -35,7 +36,6 @@ var contactTemplateSubmitted = `
 <h1>Contact Me</h1>
 <p>Thank you for submitting the form!</p>
 <p>We will answer you in the most briefly delay</p>
-<button class="contactButton" hx-get="/about" hx-swap="innerHTML" hx-target="#content" >Go back to homepage</button>
 `
 
 var contactTemplateFalse = `

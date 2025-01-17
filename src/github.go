@@ -49,7 +49,7 @@ func getRepos(user string) ([]Project, error) {
 		req.Header.Set("Authorization", "token "+token)
 	}
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := client.Do(req)	
 	if err != nil {
 		return nil, fmt.Errorf("error fetching repos: %w", err)
 	}
@@ -95,9 +95,13 @@ func getRepos(user string) ([]Project, error) {
 	for _, repoNameAndDate := range repoNamesAndDates {
 		for _, repo := range repos {
 			if repo.Name == repoNameAndDate.Name {
+				langs , err := getTopLanguages(repo.Name)
+				if err != nil {
+					fmt.Println(err)
+				}
 				project := Project{
 					Title: repo.Name,
-					Lang:  repo.Lang,
+					Lang:  langs,
 					Desc:  repo.Desc,
 				}
 				projects = append(projects, project)
@@ -105,8 +109,68 @@ func getRepos(user string) ([]Project, error) {
 			}
 		}
 	}
-
 	return projects, nil
+}
+
+func getTopLanguages(repoName string) ([]string, error) {
+	url := fmt.Sprintf("https://api.github.com/repos/tgrangeo/%s/languages",repoName)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	token := os.Getenv("GITHUB_TOKEN")
+	if token != "" {
+		req.Header.Set("Authorization", "token "+token)
+	}
+	client := &http.Client{}
+	resp, err := client.Do(req)	
+	if err != nil {
+		return nil, fmt.Errorf("error fetching repos: %w", err)
+	}
+	defer resp.Body.Close()
+	// Vérifier le code de statut HTTP
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("erreur HTTP: %d", resp.StatusCode)
+	}
+	
+	// Lire la réponse
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("erreur lors de la lecture de la réponse: %v", err)
+	}
+	
+	// Parser le JSON
+	languages := make(map[string]int)
+	err = json.Unmarshal(body, &languages)
+	if err != nil {
+		return nil, fmt.Errorf("erreur lors du parsing JSON: %v", err)
+	}
+
+	// Trier les langages par ordre décroissant d'utilisation
+	type languageUsage struct {
+		Name  string
+		Bytes int
+	}
+
+	var sortedLanguages []languageUsage
+	for lang, bytes := range languages {
+		sortedLanguages = append(sortedLanguages, languageUsage{Name: lang, Bytes: bytes})
+	}
+
+	sort.Slice(sortedLanguages, func(i, j int) bool {
+		return sortedLanguages[i].Bytes > sortedLanguages[j].Bytes
+	})
+
+	// Extraire les trois premiers langages
+	topLanguages := []string{}
+	for i, lang := range sortedLanguages {
+		if i >= 3 {
+			break
+		}
+		topLanguages = append(topLanguages, lang.Name)
+	}
+
+	return topLanguages, nil
 }
 
 func GetProfilePicture(username string) (string, error) {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"portofolio/src"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -29,19 +30,21 @@ type Data struct {
 	Content template.HTML
 }
 
-func middleware(next func(http.ResponseWriter, *http.Request)string) http.HandlerFunc {
+func middleware(next func(http.ResponseWriter, *http.Request) string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("HX-Request") != "true"{
+		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
+		if r.Header.Get("HX-Request") != "true" {
 			data := Data{
-				Content: template.HTML(next(w,r)),
+				Content: template.HTML(next(w, r)),
 			}
 			tmpl.ExecuteTemplate(w, "index.html", data)
-		}else{
+		} else {
 			w.Write([]byte(next(w, r)))
 		}
 	}
 }
-
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -56,7 +59,7 @@ func main() {
 	http.HandleFunc("/blog", middleware(src.ShowBlog))
 	http.HandleFunc("/article/", middleware(src.ShowArticle))
 	http.HandleFunc("/profile-picture", src.ProfilePictureHandler)
-	http.HandleFunc("/username",src.GetUsername)
+	http.HandleFunc("/username", src.GetUsername)
 	http.HandleFunc("/new-username/", src.SetUsername)
 
 	fs := http.FileServer(http.Dir("./static"))

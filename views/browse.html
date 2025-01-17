@@ -68,6 +68,7 @@
 }
 /* Animation */
 .typewriter-animation {
+  margin-top: 10vh;
 animation: 
   typewriter 5s steps(50) 1s 1 normal both, 
   blinkingCursor 500ms steps(50) infinite normal;
@@ -83,17 +84,17 @@ to { border-right-color: transparent; }
 </style>
 <div class="browse">
   <h1 class="cursor typewriter-animation">Welcome to My Portfolio and GitHub Explorer</h1>
-  <p>
+  <p style="backdrop-filter: blur(5px);">
     This site serves as both my personal portfolio and a dynamic GitHub profile viewer. Explore my global README to learn about me, or dive into individual project READMEs to see my work in detail.<br><br>
     Looking for a GitHub profile? Use the search bar above for quick access to any GitHub user's profile, including repositories and project READMEs.<br><br>
     Start your journey now and discover the open-source world at your fingertips!<br>
   </p>
   <p id="404" style="color: red; display: none;">account not found</p>
-  <div class="search-box">
+  <div style="backdrop-filter: blur(5px);" class="search-box">
     <input id="searchInput" type="text" placeholder="Type a github pseudo..." />
     <button id="searchButton" class="search-button" type="button">Find</button>
   </div>
-  <p>By default you are on my profile take a look at my projects and about 😊</p>
+  <p style="backdrop-filter: blur(5px);">By default you are on my profile take a look at my projects and about 😊</p>
 </div>
 <script>
   document.getElementById("searchButton").addEventListener("click", submit);

@@ -11,7 +11,7 @@ import (
 
 type Project struct{
 	Title string
-	Lang string
+	Lang []string
 	Desc string
 }
 
