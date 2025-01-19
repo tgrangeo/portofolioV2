@@ -4,12 +4,15 @@
         {{range .Projects}}
         <li hx-get="/readme/{{.Title}}" hx-push-url="{{.Title}}" 
             hx-target="#content" hx-swap="innerHTML">
-            <button onclick="event.stopPropagation();linkToGithub('{{.Title}}')">
+            <img id={{.Title}} class="repo-image" src="/static/images/project-placeholder.png">
+            <div style="margin: 10px;">
+              <button onclick="event.stopPropagation();linkToGithub('{{.Title}}')">
                 <img class="github-icon" src="../static/images/github-white.png" width="28px" />
-            </button>
-            {{.Title}}
+              </button>
+              {{.Title}}
+            </div>
             {{if ne .Desc ""}}
-            <p>{{.Desc}}</p>
+            <p class="desc">{{.Desc}}</p>
             {{end}}
             <div class="lang-list">
               {{range .Lang}}
@@ -41,6 +44,25 @@
       });
     }
 
+    async function getImageUrl() {
+      document.querySelectorAll(".repo-image").forEach(async (element) => {
+        const repo = element.id;
+        try {
+          const response = await fetch(`/repo-picture/${repo}`);
+          if (response.ok) {
+            const data = await response.json();
+            element.src = data.imageUrl || "/static/images/project-placeholder.png";
+          } else {
+            console.error(`Failed to fetch image for ${repo}`);
+            element.src = "/static/images/project-placeholder.png";
+          }
+        } catch (error) {
+          console.error(`Error fetching image for ${repo}:`, error);
+          element.src = "/static/images/project-placeholder.png";
+        }
+      });
+    }
     document.addEventListener("DOMContentLoaded", applyLanguageColors);
     document.body.addEventListener("htmx:afterSettle", applyLanguageColors);
-</script>
+    document.body.addEventListener("htmx:afterSettle", getImageUrl);
+  </script>

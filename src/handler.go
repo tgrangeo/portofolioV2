@@ -1,6 +1,7 @@
 package src
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -24,6 +25,15 @@ func SetUsername(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)
 	} else {
 		username = strings.Split(r.URL.Path, "/")[2]
+	}
+}
+
+func GetImage(w http.ResponseWriter, r *http.Request) {
+	url := GetRepoImage(strings.Split(r.URL.Path, "/")[2])
+	response := map[string]string{"imageUrl": url}
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Failed to encode JSON", http.StatusInternalServerError)
 	}
 }
 

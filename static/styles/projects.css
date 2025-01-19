@@ -23,12 +23,14 @@
     }
 
     li {
-        min-width: 18vw;
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        width: 20vw;
         backdrop-filter: blur(5px) ;
         background-color: transparent;
         border: 2px solid white;
         border-radius: 15px;
-        padding: 10px;
         margin: 1vh;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -49,5 +51,17 @@
         font-size:12px;
         margin: 3px;
         border: 1.5px solid white
+    }
+    .desc{
+        padding-left: 3px;
+        font-size: 14px;
+    }
+
+    .repo-image{
+        width: 20vw;
+        align-self: center;
+        border-radius:  15px;
+        object-fit: fill;
+        
     }
 }

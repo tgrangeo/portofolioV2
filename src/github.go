@@ -1,6 +1,7 @@
 package src
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -24,7 +25,7 @@ type GitHubFileContent struct {
 type GitHubRepo struct {
 	Name     string `json:"name"`
 	Lang     string `json:"language"`
-	Color    string `json:"color"` 
+	Color    string `json:"color"`
 	Desc     string `json:"description"`
 	PushedAt string `json:"pushed_at"`
 }
@@ -49,7 +50,7 @@ func getRepos(user string) ([]Project, error) {
 		req.Header.Set("Authorization", "token "+token)
 	}
 	client := &http.Client{}
-	resp, err := client.Do(req)	
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching repos: %w", err)
 	}
@@ -95,7 +96,7 @@ func getRepos(user string) ([]Project, error) {
 	for _, repoNameAndDate := range repoNamesAndDates {
 		for _, repo := range repos {
 			if repo.Name == repoNameAndDate.Name {
-				langs , err := getTopLanguages(repo.Name)
+				langs, err := getTopLanguages(repo.Name)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -113,7 +114,7 @@ func getRepos(user string) ([]Project, error) {
 }
 
 func getTopLanguages(repoName string) ([]string, error) {
-	url := fmt.Sprintf("https://api.github.com/repos/tgrangeo/%s/languages",repoName)
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/languages",username, repoName)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -123,7 +124,7 @@ func getTopLanguages(repoName string) ([]string, error) {
 		req.Header.Set("Authorization", "token "+token)
 	}
 	client := &http.Client{}
-	resp, err := client.Do(req)	
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching repos: %w", err)
 	}
@@ -132,13 +133,13 @@ func getTopLanguages(repoName string) ([]string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("erreur HTTP: %d", resp.StatusCode)
 	}
-	
+
 	// Lire la réponse
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("erreur lors de la lecture de la réponse: %v", err)
 	}
-	
+
 	// Parser le JSON
 	languages := make(map[string]int)
 	err = json.Unmarshal(body, &languages)
@@ -314,4 +315,61 @@ func fetchUserReadme(username string) (string, error) {
 	md := markdown.ToHTML(decodedContent, mdParser, renderer)
 
 	return string(md), nil
+}
+
+type GraphQLRequest struct {
+	Query string `json:"query"`
+}
+
+type GraphQLResponse struct {
+	Data struct {
+		Repository struct {
+			OpenGraphImageUrl string `json:"openGraphImageUrl"`
+		} `json:"repository"`
+	} `json:"data"`
+}
+
+func GetRepoImage(name string) string {
+	githubToken := os.Getenv("GITHUB_TOKEN")
+	if githubToken == "" {
+		log.Fatal("Please set your GitHub token in the GITHUB_TOKEN environment variable")
+	}
+
+	query := `
+	query {
+		repository(owner: "`+ username +`", name: "` + name + `") {
+			openGraphImageUrl
+		}
+	}
+`
+	requestBody, err := json.Marshal(GraphQLRequest{Query: query})
+	if err != nil {
+		log.Fatalf("Failed to marshal request: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", "https://api.github.com/graphql", bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Fatalf("Failed to create request: %v", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+githubToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		log.Fatalf("Request failed with status %d: %s", resp.StatusCode, string(body))
+	}
+
+	var graphQLResp GraphQLResponse
+	if err := json.NewDecoder(resp.Body).Decode(&graphQLResp); err != nil {
+		log.Fatalf("Failed to decode response: %v", err)
+	}
+	return graphQLResp.Data.Repository.OpenGraphImageUrl
 }

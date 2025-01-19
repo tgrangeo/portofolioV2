@@ -48,5 +48,6 @@
   "Scheme": {"color": "#1E4AEC"},
   "Common Lisp": {"color": "#3FB68B"},
   "D": {"color": "#BA595E"},
-  "ABAP": {"color": "#E8274B"}
+  "ABAP": {"color": "#E8274B"},
+  "Svelte":{"color":"#ff4000"}
 }
