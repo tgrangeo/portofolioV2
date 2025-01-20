@@ -40,7 +40,7 @@ type GitHubUser struct {
 }
 
 func getRepos(user string) ([]Project, error) {
-	url := fmt.Sprintf("https://api.github.com/users/%s/repos", user)
+	url := fmt.Sprintf("https://api.github.com/users/%s/repos?per_page=60&page=1", user)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -206,27 +206,30 @@ func GetProfilePicture(username string) (string, error) {
 }
 
 func hasReadme(username, repo string) bool {
-	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/README.md", username, repo)
-	req, err := http.NewRequest("HEAD", url, nil)
-	if err != nil {
-		log.Printf("error creating request: %v", err)
-		return false
+	if username != repo{
+		url := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/README.md", username, repo)
+		req, err := http.NewRequest("HEAD", url, nil)
+		if err != nil {
+			log.Printf("error creating request: %v", err)
+			return false
+		}
+		
+		token := os.Getenv("GITHUB_TOKEN")
+		if token != "" {
+			req.Header.Set("Authorization", "token "+token)
+		}
+		
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Printf("error fetching repo README: %v", err)
+			return false
+		}
+		defer resp.Body.Close()
+		
+		return resp.StatusCode == http.StatusOK
 	}
-
-	token := os.Getenv("GITHUB_TOKEN")
-	if token != "" {
-		req.Header.Set("Authorization", "token "+token)
-	}
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Printf("error fetching repo README: %v", err)
-		return false
-	}
-	defer resp.Body.Close()
-
-	return resp.StatusCode == http.StatusOK
+	return false
 }
 
 func fetchRepoReadme(username string, repo string) (string, error) {
