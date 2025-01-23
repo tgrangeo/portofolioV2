@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -31,24 +32,14 @@ func GetProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowProjects(w http.ResponseWriter, r *http.Request) string {
-	return "hi"
-}
-// // repos, err := getRepos(username)
-// // if err != nil {
-// // 	log.Printf("Error fetching repos : %v", err)
-// // 	http.Error(w, fmt.Sprintf("Error fetching repos: %v", err), http.StatusInternalServerError)
-// // 	return ""
-// // }
-// // data := Projects_Data{
-// // 	Projects: repos,
-// // }
-// htmlFile, err := os.ReadFile("views/projects.html")
-// if err != nil {
-// 	http.Error(w, "Unable to read HTML file", http.StatusInternalServerError)
-// 	return ""
-// }
-// w.Header().Set("Content-Type", "text/html")
-// return string(htmlFile)
+	htmlFile, err := os.ReadFile("views/projects.html")
+	if err != nil {
+			http.Error(w, "Unable to read HTML file", http.StatusInternalServerError)
+			return ""
+		}
+		w.Header().Set("Content-Type", "text/html")
+		return string(htmlFile)
+	}
 
 func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string {
 	path := r.URL.Path

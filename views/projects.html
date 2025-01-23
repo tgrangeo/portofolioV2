@@ -1,47 +1,102 @@
-<link rel="stylesheet" href="../static/styles/projects.css" />
-<div class="projects">
-    <ul id="projects-list">
-        <!-- Placeholder for dynamic content -->
-         <p>here</p>
-    </ul>
-</div>
-<!-- <script>
-    async function loadProjects() {
-        try {
-            const response = await fetch("/api/projects");
-            if (!response.ok) {
-                throw new Error("Failed to fetch projects");
-            }
 
-            const repos = await response.json();
-            const projectsList = document.getElementById("projects-list");
-            projectsList.innerHTML = repos.map(repo => `
-                <li hx-get="/readme/${repo.Title}" hx-push-url="${repo.Title}" 
-                    hx-target="#content" hx-swap="innerHTML">
-                    <img id="${repo.Title}" class="repo-image" src="/static/images/project-placeholder.png">
-                    <div style="margin: 10px;">
-                        <button onclick="event.stopPropagation();linkToGithub('${repo.Title}')">
-                            <img class="github-icon" src="../static/images/github-white.png" width="28px" />
-                        </button>
-                        ${repo.Title}
-                    </div>
-                    ${repo.Desc ? `<p class="desc">${repo.Desc}</p>` : ""}
-                    <div class="lang-list">
-                        ${repo.Lang.map(lang => `
-                            <p class="language" style="border-radius:10px; width: fit-content; font-size:12px; padding:5px; border: 1.5px solid white">
-                                ${lang}
-                            </p>
-                        `).join("")}
-                    </div>
-                </li>
-            `).join("");
+<body>
+  <div class="projects">
+    <ul id="projects-list" class="grid"></ul>
+  </div>
 
-            applyLanguageColors();
-            getImageUrl();
-        } catch (error) {
-            console.error("Error loading projects:", error);
+  <template id="project-template">
+    <li>
+      <img id="${repo.Title}" class="repo-image skeleton" src="">
+      <div style="margin-top:10px; display:flex; flex-direction:row; align-items:center">
+        <button class="github-button" onclick="event.stopPropagation();linkToGithub('${repo.Title}')">
+          <img class="github-icon" src="../static/images/github-white.png" width="28px" />
+        </button>
+        <div class="skeleton skeleton-text-title" data-title></div>
+      </div>
+      <p class="desc skeleton skeleton-text"></p>
+      <p class="desc skeleton skeleton-text"></p>
+      <div class="lang-list">
+        <p class="language skeleton skeleton-text"></p>
+        <p class="language skeleton skeleton-text"></p>
+        <p class="language skeleton skeleton-text"></p>
+      </div>
+    </li>
+  </template>
+
+  <script>
+    const projectsList = document.getElementById('projects-list');
+    const projectTemplate = document.getElementById('project-template');
+    function loadSkeleton(){
+        for (let i = 0; i < 10; i++) {
+            projectsList.append(projectTemplate.content.cloneNode(true))
         }
     }
+    
+    async function loadProjects() {
+      loadSkeleton()
+      try {
+        const response = await fetch("/getProjects");
+        if (!response.ok) throw new Error("Failed to fetch projects");
+        const repos = await response.json();
+        projectsList.innerHTML = '';
+        repos.forEach(repo => {
+          const projectElement = projectTemplate.content.cloneNode(true);
+          projectElement.querySelector('.repo-image').id = repo.Title;
+          projectElement.querySelector('.repo-image').src = "";
+          projectElement.querySelector('[data-title]').textContent = repo.Title;
+          projectElement.querySelector('.github-button').onclick = () => linkToGithub(repo.Title);
+          if (repo.Desc) {
+            const descElements = projectElement.querySelectorAll('.desc');
+            descElements[0].textContent = repo.Desc;
+          }
+          const langList = projectElement.querySelector('.lang-list');
+          if (repo.Lang) {
+            langList.innerHTML = repo.Lang.map(lang => `
+              <p class="language" style="border-radius:10px; width: fit-content; font-size:12px; padding:5px; border: 1.5px solid white">
+                ${lang}
+              </p>
+            `).join("");
+          }
+          projectsList.appendChild(projectElement);
+        });
+        applyLanguageColors();
+        getImageUrl();
+      } catch (error) {
+        console.error("Error loading projects:", error);
+      }
+    }
 
-  </script> -->
-  <!-- document.addEventListener("DOMContentLoaded", loadProjects); -->
+    async function applyLanguageColors() {
+      const response = await fetch("/static/colors.json");
+      const languages = await response.json();
+
+      document.querySelectorAll(".language").forEach(element => {
+        const lang = element.textContent.trim();
+        const color = languages[lang]?.color || "#FFFFFF";
+        element.style.borderColor = color;
+        element.style.color = color;
+      });
+    }
+
+    async function getImageUrl() {
+      document.querySelectorAll(".repo-image").forEach(async element => {
+        const repo = element.id;
+        try {
+          const response = await fetch(`/repo-picture/${repo}`);
+          const data = response.ok ? await response.json() : {};
+          element.src = data.imageUrl;
+        } catch (error) {
+          console.error(`Error fetching image for ${repo}:`, error);
+          element.src = "";
+        }
+      });
+    }
+
+    function linkToGithub(repoTitle) {
+      window.open(`https://github.com/${repoTitle}`, "_blank");
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProjects);
+    document.body.addEventListener("htmx:afterSettle", loadProjects);
+  </script>
+</body>

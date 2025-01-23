@@ -1,3 +1,27 @@
+.skeleton{
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+.skeleton-text-title{
+    width: 80%;
+    height: 1.5rem;
+    border-radius: 0.25rem;
+}
+.skeleton-text{
+    width: 100%;
+    height: 1rem;
+    border-radius: 0.25rem;
+}
+
+@keyframes skeleton-loading {
+    0%{
+        background-color: hsl(0, 0%, 12%);
+    }
+    100%{
+        background-color: hsl(200, 20%, 50%);
+    }
+}
+
 .projects {
     font-size: 24px;
     display: flex;
@@ -12,6 +36,8 @@
 
     p{
         font-size: 12px;
+        margin: 10px 0 0 0;
+
     }
 
     ul {
@@ -40,6 +66,7 @@
     li:hover {
         transform: scale(1.1);
         box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+        cursor: pointer;
     }
 
     .lang-list{
@@ -50,9 +77,10 @@
     .language{
         border-radius:5px; 
         width: fit-content; 
+        min-width: 20px;
         font-size:12px;
         margin: 3px;
-        border: 1.5px solid white
+        border: 1.5px solid transparent
     }
     .desc{
         padding-left: 3px;
@@ -65,6 +93,5 @@
         align-self: center;
         border-radius:  15px;
         object-fit:cover;
-        
     }
 }
