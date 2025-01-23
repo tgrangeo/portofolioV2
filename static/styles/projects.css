@@ -1,0 +1,70 @@
+.projects {
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+        background: none;
+        border: none;
+        color: aliceblue;
+        cursor: pointer;
+    }
+
+    p{
+        font-size: 12px;
+    }
+
+    ul {
+        position: relative;
+        left: 10%;
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    li {
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        width: 18vw;
+        backdrop-filter: blur(5px) ;
+        background-color: transparent;
+        border: 2px solid white;
+        border-radius: 15px;
+        margin: 1vh;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    li:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .lang-list{
+        display: flex;
+        flex-direction:row;
+        padding-top: 3px;
+    }
+    .language{
+        border-radius:5px; 
+        width: fit-content; 
+        font-size:12px;
+        margin: 3px;
+        border: 1.5px solid white
+    }
+    .desc{
+        padding-left: 3px;
+        font-size: 14px;
+    }
+
+    .repo-image{
+        width: 18vw;
+        height: 16vh;
+        align-self: center;
+        border-radius:  15px;
+        object-fit:cover;
+        
+    }
+}
