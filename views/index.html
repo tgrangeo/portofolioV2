@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-WJRPP7L9');</script>
-  <!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tgrangeo</title>
-    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico" />
     <link rel="stylesheet" href="../static/styles/index.css" />
     <!-- font -->
     <link
@@ -24,99 +17,107 @@
       integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
       crossorigin="anonymous"
     ></script>
-    <!-- background -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJRPP7L9"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <div class="side-menu">
+    <video autoplay muted loop id="myVideo">
+      <source src="./static/background.mp4" type="video/mp4" />
+    </video>
+    <div class="side-menu">
       <ul>
         <li>
-          <button class="side-menu-button" hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
-            <img src="../static/images/browse.png"/>
+          <button
+            class="side-menu-button"
+            hx-get="/browse"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            hx-push-url="browse"
+          >
+            <img src="../static/images/browse.png" />
             <div class="text">Browse</div>
           </button>
         </li>
         <li>
           <button class="side-menu-button" id="meButton" hx-target="#content">
-            <img src="../static/images/me.png"/>
+            <img src="../static/images/me.png" />
             <div class="text">Me</div>
           </button>
         </li>
-        <!-- <li>
-          <button class="side-menu-button" hx-get="/blog" hx-swap="innerHTML" hx-target="#content" hx-push-url="blog">
-            Blog
-          </button>
-        </li> -->
         <li>
-          <button class="side-menu-button" hx-get="/contact" hx-swap="innerHTML" hx-target="#content" hx-push-url="contact">
-            <img src="../static/images/email.png"/>
+          <button
+            class="side-menu-button"
+            hx-get="/contact"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            hx-push-url="contact"
+          >
+            <img src="../static/images/email.png" />
             <div class="text">Contact</div>
           </button>
         </li>
       </ul>
       <div class="line"></div>
-  </div>
-  <div class="page">
-    <div id="header" class="header">
-      <div>
-        <div class="user-title"  hx-get="/browse" hx-swap="innerHTML" hx-target="#content" hx-push-url="browse">
+    </div>
+    <div class="page">
+      <div id="header" class="header">
+        <div>
           <div
-            id="profile-picture-container"
-            hx-get="/profile-picture"
-            hx-trigger="load"
-            hx-target="#profile-picture"
-            hx-swap="outerHTML"
-          >
-            <img
-              id="profile-picture"
-              class="profile-picture"
-              width="70px"
-              src="static/placeholder.png"
-              alt="Profile"
-            />
-          </div>
-          <h1
-            id="username"
-            class="title"
-            hx-get="/username"
-            hx-target="#username"
-            hx-swap="innerHTML"
-            hx-trigger="load"
-          >
-            username
-          </h1>
-        </div>
-      </div>
-      <div class="menu" id="menu">
-          <button
-            hx-get="/about"
-            hx-push-url="/about" 
+            class="user-title"
+            hx-get="/browse"
             hx-swap="innerHTML"
             hx-target="#content"
+            hx-push-url="browse"
+          >
+            <div
+              id="profile-picture-container"
+              hx-get="/profile-picture"
+              hx-trigger="load"
+              hx-target="#profile-picture"
+              hx-swap="outerHTML"
+            >
+              <img
+                id="profile-picture"
+                class="profile-picture"
+                width="70px"
+                src="static/placeholder.png"
+                alt="Profile"
+              />
+            </div>
+            <h1
+              id="username"
+              class="title"
+              hx-get="/username"
+              hx-target="#username"
+              hx-swap="innerHTML"
+              hx-trigger="load"
+            >
+              username
+            </h1>
+          </div>
+        </div>
+        <div class="menu" id="menu">
+          <button
+            hx-get="/about"
+            hx-push-url="/about"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            onclick="if (window.location.pathname === '/projects') return false;"
           >
             About
           </button>
           <button
             hx-get="/projects"
-            hx-push-url="/projects" 
+            hx-push-url="/projects"
             hx-swap="innerHTML"
             hx-target="#content"
+            onclick="if (window.location.pathname === '/projects') return false;"
           >
             Projects
           </button>
+        </div>
+        <div></div>
       </div>
-      <div></div>
+      <div id="content" class="content">{{.Content}}</div>
     </div>
-    <div
-      id="content"
-      class="content"
-      >{{.Content}}</div>
-  </div>
   </body>
 </html>
 <script>
@@ -140,15 +141,3 @@
       });
   });
 </script>
-<!-- VANTA.NET({
-  el: "html",
-  mouseControls: false,
-  touchControls: false,
-  gyroControls: false,
-  minHeight: 200.00,
-  minWidth: 200.00,
-  scale: 0.40,
-  scaleMobile: 1.00,
-  color: 0x373737,
-  backgroundColor: 0x90909
-}) -->

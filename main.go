@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"portofolio/src"
-	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -32,9 +31,6 @@ type Data struct {
 
 func middleware(next func(http.ResponseWriter, *http.Request) string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-		w.Header().Set("Pragma", "no-cache")
-		w.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
 		if r.Header.Get("HX-Request") != "true" {
 			data := Data{
 				Content: template.HTML(next(w, r)),
@@ -54,6 +50,7 @@ func main() {
 	http.HandleFunc("/contact", middleware(src.ContactHandler))
 	http.HandleFunc("/submit", middleware(src.HandleSubmit))
 	http.HandleFunc("/projects", middleware(src.ShowProjects))
+	http.HandleFunc("/getProjects", src.GetProjects)
 	http.HandleFunc("/browse", middleware(src.ShowBrowse))
 	http.HandleFunc("/readme/", middleware(src.ShowProjectReadme))
 	http.HandleFunc("/blog", middleware(src.ShowBlog))

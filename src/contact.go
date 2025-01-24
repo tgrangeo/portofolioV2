@@ -91,7 +91,7 @@ func HandleSubmit(w http.ResponseWriter, r *http.Request) string {
 		} else {
 			return contactTemplateFalse
 		}
-		return ""
+		
 	}
 	http.Redirect(w, r, "/contact", http.StatusSeeOther)
 	return ""

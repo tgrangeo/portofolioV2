@@ -129,25 +129,18 @@ func getTopLanguages(repoName string) ([]string, error) {
 		return nil, fmt.Errorf("error fetching repos: %w", err)
 	}
 	defer resp.Body.Close()
-	// Vérifier le code de statut HTTP
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("erreur HTTP: %d", resp.StatusCode)
 	}
-
-	// Lire la réponse
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("erreur lors de la lecture de la réponse: %v", err)
 	}
-
-	// Parser le JSON
 	languages := make(map[string]int)
 	err = json.Unmarshal(body, &languages)
 	if err != nil {
 		return nil, fmt.Errorf("erreur lors du parsing JSON: %v", err)
 	}
-
-	// Trier les langages par ordre décroissant d'utilisation
 	type languageUsage struct {
 		Name  string
 		Bytes int
@@ -161,8 +154,6 @@ func getTopLanguages(repoName string) ([]string, error) {
 	sort.Slice(sortedLanguages, func(i, j int) bool {
 		return sortedLanguages[i].Bytes > sortedLanguages[j].Bytes
 	})
-
-	// Extraire les trois premiers langages
 	topLanguages := []string{}
 	for i, lang := range sortedLanguages {
 		if i >= 3 {

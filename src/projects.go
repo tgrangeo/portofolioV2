@@ -1,12 +1,12 @@
 package src
 
 import (
-	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
-	"text/template"
 )
 
 type Project struct{
@@ -19,29 +19,27 @@ type Projects_Data struct {
 	Projects []Project
 }
 
-func ShowProjects(w http.ResponseWriter, r *http.Request) string {
-	repos, err := getRepos(username)
-	if err != nil {
-		log.Printf("Error fetching repos : %v", err)
-		http.Error(w, fmt.Sprintf("Error fetching repos: %v", err), http.StatusInternalServerError)
-		return ""
-	}
-	data := Projects_Data{
-		Projects: repos,
-	}
-	tmpl, err := template.ParseFiles("views/projects.html")
-	if err != nil {
-		http.Error(w, "Error parsing template", http.StatusInternalServerError)
-		return ""
-	}
-	var buf bytes.Buffer
-	err = tmpl.Execute(&buf, data)
-	if err != nil {
-		http.Error(w, "Error rendering template", http.StatusInternalServerError)
-		return ""
-	}
-	return buf.String()
+func GetProjects(w http.ResponseWriter, r *http.Request) {
+    repos, err := getRepos(username)
+    if err != nil {
+        log.Printf("Error fetching repos: %v", err)
+        http.Error(w, "Error fetching repos", http.StatusInternalServerError)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(repos)
 }
+
+func ShowProjects(w http.ResponseWriter, r *http.Request) string {
+	htmlFile, err := os.ReadFile("views/projects.html")
+	if err != nil {
+			http.Error(w, "Unable to read HTML file", http.StatusInternalServerError)
+			return ""
+		}
+		w.Header().Set("Content-Type", "text/html")
+		return string(htmlFile)
+	}
 
 func ShowProjectReadme(w http.ResponseWriter, r *http.Request) string {
 	path := r.URL.Path
