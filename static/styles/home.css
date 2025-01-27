@@ -1,0 +1,40 @@
+.first {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    margin: 2px !important;
+    font-size: 8vh;
+    background: linear-gradient(to right, hsl(51, 100%, 62%), hsl(204 100% 59%));
+    background: linear-gradient(
+      to right in oklch,
+      hsl(51, 100%, 62%),
+      hsl(314, 100%, 59%)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  h3 {
+    margin: 2px !important;
+    font-size: 4vh;
+    margin-left: 2vw !important;
+  }
+}
+
+.second{
+  display: flex;
+  overflow: visible !important;
+  height: 100vh;
+  z-index: -1;
+  width: 100vw;
+  flex-direction: row;
+  color: aliceblue;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgb(14, 14, 14);
+  position: relative;
+}

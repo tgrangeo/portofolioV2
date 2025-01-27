@@ -1,0 +1,18 @@
+<div class="blog" id="blog">
+	<h1>Article List</h1>
+	<ul>
+	  {{range .Articles}}
+	  <li>
+		<button
+		  class="article-button"
+		  hx-get="/article/{{.Title}}" 
+		  hx-target="#blog" 
+		  hx-swap="innerHTML"
+		  hx-push-url="/article/{{.Title}}" 
+		>
+		  {{.Title}}
+		</button>
+	  </li>
+	  {{end}}
+	</ul>
+</div>

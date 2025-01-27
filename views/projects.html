@@ -1,0 +1,245 @@
+<body>
+  <div class="projects">
+    <ul id="projects-list" class="grid"></ul>
+  </div>
+
+  <template id="project-template">
+    <li>
+      <img class="repo-image skeleton" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/w8AAgMBAAI+hxYAAAAASUVORK5CYII=" />
+      <div
+        style="
+          margin-top: 10px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        "
+      >
+        <button
+          class="github-button"
+          onclick="event.stopPropagation();linkToGithub('${repo.Title}')"
+        >
+          <img
+            class="github-icon"
+            src="../static/images/github-white.png"
+            width="28px"
+          />
+        </button>
+        <div class="skeleton skeleton-text-title" data-title></div>
+      </div>
+      <p class="desc skeleton skeleton-text"></p>
+      <p class="desc skeleton skeleton-text"></p>
+      <div class="lang-list">
+        <p class="language skeleton skeleton-text"></p>
+        <p class="language skeleton skeleton-text"></p>
+        <p class="language skeleton skeleton-text"></p>
+      </div>
+    </li>
+  </template>
+
+  <script>
+    function loadSkeleton(projectsList, projectTemplate) {
+      for (let i = 0; i < 10; i++) {
+        projectsList.append(projectTemplate.content.cloneNode(true));
+      }
+    }
+
+    async function loadProjects() {
+      let projectsList = document.getElementById("projects-list");
+      let projectTemplate = document.getElementById("project-template");
+      loadSkeleton(projectsList, projectTemplate);
+      try {
+        const response = await fetch("/getProjects");
+        if (!response.ok) throw new Error("Failed to fetch projects");
+        const repos = await response.json();
+        projectsList.innerHTML = "";
+        repos.forEach((repo) => {
+          const projectElement = projectTemplate.content.cloneNode(true);
+          projectElement
+            .querySelector("li")
+            .setAttribute("hx-get", "/readme/" + repo.Title);
+          projectElement
+            .querySelector("li")
+            .setAttribute("hx-target", "#content");
+          projectElement
+            .querySelector("li")
+            .setAttribute("hx-swap", "innerHTML");
+          projectElement
+            .querySelector("li")
+            .setAttribute("hx-push-url", repo.Title);
+          projectElement.querySelector(".repo-image").id = repo.Title;
+          projectElement.querySelector("[data-title]").textContent = repo.Title;
+          projectElement.querySelector(".github-button").onclick = () =>
+            linkToGithub(repo.Title);
+          if (repo.Desc) {
+            const descElements = projectElement.querySelectorAll(".desc");
+            descElements[0].textContent = repo.Desc;
+          }
+          const langList = projectElement.querySelector(".lang-list");
+          if (repo.Lang) {
+            langList.innerHTML = repo.Lang.map(
+              (lang) => `
+              <p class="language" style="border-radius:10px; width: fit-content; font-size:12px; padding:5px; border: 1.5px solid white">
+                ${lang}
+              </p>
+            `
+            ).join("");
+          }
+          projectsList.appendChild(projectElement);
+        });
+        applyLanguageColors();
+        getImageUrl();
+      } catch (error) {
+        console.error("Error loading projects:", error);
+      }
+      htmx.process(projectsList);
+       document
+        .querySelectorAll(".skeleton-text-title")
+        .forEach(function (element) {
+          element.classList.remove("skeleton-text-title");
+        });
+      document.querySelectorAll(".skeleton-text").forEach(function (element) {
+        element.classList.remove("skeleton-text");
+      });
+      document.querySelectorAll(".skeleton").forEach(function (element) {
+        element.classList.remove("skeleton");
+      });
+      
+    }
+
+    async function applyLanguageColors() {
+      const response = await fetch("/static/colors.json");
+      const languages = await response.json();
+
+      document.querySelectorAll(".language").forEach((element) => {
+        const lang = element.textContent.trim();
+        const color = languages[lang]?.color || "#FFFFFF";
+        element.style.borderColor = color;
+        element.style.color = color;
+      });
+    }
+
+    async function getImageUrl() {
+      document.querySelectorAll(".repo-image").forEach(async (element) => {
+        const repo = element.id;
+        try {
+          const response = await fetch(`/repo-picture/${repo}`);
+          const data = response.ok ? await response.json() : {};
+          element.src = data.imageUrl;
+        } catch (error) {
+          console.error(`Error fetching image for ${repo}:`, error);
+          element.src = "";
+        }
+      });
+    }
+
+    function linkToGithub(repoTitle) {
+      window.open(`https://github.com/${username}/${repoTitle}`, "_blank");
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProjects);
+    document.body.addEventListener("htmx:afterSettle", loadProjects);
+  </script>
+</body>
+<style>
+  .skeleton {
+    width: 18vw;
+      height: 16vh;
+      align-self: center;
+      border-radius: 15px;
+      object-fit: cover;
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  .skeleton-text-title {
+    width: 80%;
+    height: 1.5rem;
+    border-radius: 0.25rem;
+  }
+  .skeleton-text {
+    width: 100%;
+    height: 1rem;
+    border-radius: 0.25rem;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background-color: hsl(0, 0%, 12%);
+    }
+    100% {
+      background-color: hsl(200, 20%, 50%);
+    }
+  }
+
+  .projects {
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+      background: none;
+      border: none;
+      color: aliceblue;
+      cursor: pointer;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 10px 0 0 0;
+    }
+
+    ul {
+      position: relative;
+      left: 10%;
+      list-style-type: none;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    li {
+      display: flex;
+      padding: 10px;
+      flex-direction: column;
+      width: 18vw;
+      backdrop-filter: blur(5px);
+      background-color: transparent;
+      border: 2px solid white;
+      border-radius: 15px;
+      margin: 1vh;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    li:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+    }
+
+    .lang-list {
+      display: flex;
+      flex-direction: row;
+      padding-top: 3px;
+    }
+    .language {
+      border-radius: 5px;
+      width: fit-content;
+      min-width: 20px;
+      font-size: 12px;
+      margin: 3px;
+      border: 1.5px solid transparent;
+    }
+    .desc {
+      padding-left: 3px;
+      font-size: 14px;
+    }
+
+    .repo-image {
+      width: 18vw;
+      height: 16vh;
+      align-self: center;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+  }
+</style>

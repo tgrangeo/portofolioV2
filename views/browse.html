@@ -1,0 +1,159 @@
+<div class="browse">
+  <h1 class="cursor typewriter-animation">
+    Welcome to My Portfolio and GitHub Explorer
+  </h1>
+  <p style="backdrop-filter: blur(5px)">
+    This site serves as both my personal portfolio and a dynamic GitHub profile
+    viewer. Explore my global README to learn about me, or dive into individual
+    project READMEs to see my work in detail.<br /><br />
+    Looking for a GitHub profile? Use the search bar above for quick access to
+    any GitHub user's profile, including repositories and project READMEs.<br /><br />
+    Start your journey now and discover the open-source world at your
+    fingertips!<br />
+  </p>
+  <p class=".gradient-text" id="404" style="color: red; display: none">
+    account not found
+  </p>
+  <div style="backdrop-filter: blur(5px)" class="search-box">
+    <input id="searchInput" type="text" placeholder="Type a github pseudo..." />
+    <button id="searchButton" class="search-button" type="button">Find</button>
+  </div>
+  <p style="backdrop-filter: blur(5px)">
+    By default you are on my profile take a look at my projects and about 😊
+  </p>
+</div>
+<script>
+  document.getElementById("searchButton").addEventListener("click", submit);
+  document
+    .getElementById("searchInput")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        submit();
+      }
+    });
+  function submit() {
+    const input = document.getElementById("searchInput").value.trim();
+    if (input === "") {
+      return;
+    }
+    fetch(`/new-username/${encodeURIComponent(input)}`, { method: "GET" })
+      .then((response) => {
+        if (response.status === 200) {
+          document.getElementById("404").style.display = "none";
+          window.location.href = "/about";
+        } else {
+          document.getElementById("404").style.display = "block";
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
+        document.getElementById("404").style.display = "block";
+      });
+  }
+</script>
+<style>
+  .browse {
+    display: flex;
+    flex-direction: column;
+    max-width: 60vw;
+    margin-left: 15vw;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  input[type="text"] {
+    width: 500px;
+    padding: 10px 15px;
+    font-size: 1.2em;
+    border: 2px solid #ccc;
+    border-radius: 15px 0 0 15px;
+    outline: none;
+  }
+
+  .search-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: 2px solid #28a745;
+    border-left: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 0 15px 15px 0;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .search-button:hover {
+    background-color: #218838;
+  }
+
+  .me-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: 2px solid #28a745;
+    border-left: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .me-button:hover {
+    background-color: #218838;
+  }
+
+  .gradient-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(
+      90deg,
+      #ffffff,
+      #aaaaaa
+    ); /* Adjust gradient colors */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Cursor */
+  .cursor {
+    position: relative;
+    width: 24em;
+    margin: 0 auto;
+    border-right: 2px solid rgba(255, 255, 255, 0.75);
+    font-size: 4.8vw;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);
+  }
+  /* Animation */
+  .typewriter-animation {
+    margin-top: 10vh;
+    animation: typewriter 5s steps(50) 1s 1 normal both,
+      blinkingCursor 500ms steps(50) infinite normal;
+  }
+  @keyframes typewriter {
+    from {
+      width: 0;
+    }
+    to {
+      width: 90%;
+    }
+  }
+  @keyframes blinkingCursor {
+    from {
+      border-right-color: rgba(255, 255, 255, 0.75);
+    }
+    to {
+      border-right-color: transparent;
+    }
+  }
+</style>

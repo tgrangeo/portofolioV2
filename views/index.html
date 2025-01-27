@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tgrangeo</title>
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico" />
+    <link rel="stylesheet" href="../static/styles/index.css" />
+    <!-- font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- htmx -->
+    <script
+      src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js"
+      integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <video autoplay muted loop id="myVideo">
+      <source src="./static/background.mp4" type="video/mp4" />
+    </video>
+    <div class="side-menu">
+      <ul>
+        <li>
+          <button
+            class="side-menu-button"
+            hx-get="/home"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            hx-push-url="home"
+          >
+            <img src="../static/images/home.png" />
+            <div class="text">Home</div>
+          </button>
+        </li>
+        <li>
+          <button
+            class="side-menu-button"
+            hx-get="/browse"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            hx-push-url="browse"
+          >
+            <img src="../static/images/browse.png" />
+            <div class="text">Browse</div>
+          </button>
+        </li>
+        <li>
+          <button class="side-menu-button" id="meButton" hx-target="#content">
+            <img src="../static/images/me.png" />
+            <div class="text">Me</div>
+          </button>
+        </li>
+        <li>
+          <button
+            class="side-menu-button"
+            hx-get="/contact"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            hx-push-url="contact"
+          >
+            <img src="../static/images/email.png" />
+            <div class="text">Contact</div>
+          </button>
+        </li>
+      </ul>
+      <div class="line"></div>
+    </div>
+    <div class="page">
+      <div id="header" class="header">
+        <div>
+          <div
+            class="user-title"
+          >
+            <div
+              id="profile-picture-container"
+              hx-get="/profile-picture"
+              hx-trigger="load"
+              hx-target="#profile-picture"
+              hx-swap="outerHTML"
+            >
+              <img
+                id="profile-picture"
+                class="profile-picture"
+                width="70px"
+                src="static/placeholder.png"
+                alt="Profile"
+              />
+            </div>
+            <h1
+              id="username"
+              class="title"
+              hx-get="/username"
+              hx-target="#username"
+              hx-swap="innerHTML"
+              hx-trigger="load"
+            >
+              username
+            </h1>
+          </div>
+        </div>
+        <div class="menu" id="menu">
+          <button
+            hx-get="/about"
+            hx-push-url="/about"
+            hx-swap="innerHTML"
+            hx-target="#content"
+          >
+            About
+          </button>
+          <button
+            hx-get="/projects"
+            hx-push-url="/projects"
+            hx-swap="innerHTML"
+            hx-target="#content"
+          >
+            Projects
+          </button>
+        </div>
+        <div></div>
+      </div>
+      <div id="content" class="content">{{.Content}}</div>
+    </div>
+  </body>
+</html>
+<script>
+  document.getElementById("meButton").addEventListener("click", function () {
+    fetch("/new-username/tgrangeo", {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error("Erreur lors de la récupération du profil");
+        }
+      })
+      .then((data) => {
+        location.reload();
+        window.location.href = "/about";
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
+
+  function hideHeader(){
+    const header = document.getElementById('header');
+    if (header) {
+      const path = window.location.pathname;
+      if (path.startsWith('/home') || path.startsWith('/blog') || path.startsWith('/contact')) {
+        header.style.display = 'none';
+      } else {
+        header.style.display = '';
+      }
+    }
+  }
+  
+
+  document.addEventListener('DOMContentLoaded', hideHeader);
+  document.body.addEventListener("htmx:afterSettle", hideHeader);
+</script>
