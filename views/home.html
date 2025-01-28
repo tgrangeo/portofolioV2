@@ -1,121 +1,263 @@
 <html>
-    <div class="first">
-        <h1>THOMAS GRANGEON</h1>
-        <h3>Driven by Ideas, Powered by Passion.</h3>
+  <div class="transparent-slide home-slide">
+    <h1 class="gradient-text">THOMAS GRANGEON</h1>
+    <h3>Driven by Ideas, Powered by Passion.</h3>
+  </div>
+  <div class="card-slide dark-slide">
+    <h1 class="gradient-text" style="align-self: flex-start; margin-left: 26vh">
+      My Stack
+    </h1>
+    <div style="display: flex; flex-direction: row">
+      <div class="card">
+        <img
+          src="./static/images/lang_logo/gopher.png"
+          alt="Golang Logo"
+          class="logo"
+        />
+        <h3>Golang</h3>
+        <p>
+          I build backend systems and CLI tools using Go, focusing on
+          performance and scalability.
+        </p>
+      </div>
+      <div class="card">
+        <img
+          src="./static/images/lang_logo/Typescript.png"
+          alt="TypeScript Logo"
+          class="logo"
+        />
+        <h3>TypeScript</h3>
+        <p>
+          I develop interactive frontends and APIs with TypeScript, ensuring
+          type safety and maintainability.
+        </p>
+      </div>
+      <div class="card">
+        <img
+          src="./static/images/lang_logo/Python.png"
+          alt="Python Logo"
+          class="logo"
+        />
+        <h3>Python</h3>
+        <p>
+          I use Python for scripting, automation, and data analysis with
+          libraries like Pandas and NumPy.
+        </p>
+      </div>
+      <div class="card">
+        <img
+          src="./static/images/lang_logo/crab.png"
+          alt="Rust Logo"
+          class="logo"
+        />
+        <h3>Rust</h3>
+        <p>
+          I leverage Rust to build performant and memory-safe applications with
+          a focus on systems programming.
+        </p>
+      </div>
     </div>
-    <div class="second">
-        <div class="card">
-            <img src="./static/images/lang_logo/gopher.png" alt="Golang Logo" class="logo">
-            <h3>Golang</h3>
-            <p>I build backend systems and CLI tools using Go, focusing on performance and scalability.</p>
-        </div>
-        <div class="card">
-            <img src="./static/images/lang_logo/Typescript.png" alt="TypeScript Logo" class="logo">
-            <h3>TypeScript</h3>
-            <p>I develop interactive frontends and APIs with TypeScript, ensuring type safety and maintainability.</p>
-        </div>
-        <div class="card">
-            <img src="./static/images/lang_logo/Python.png" alt="Python Logo" class="logo">
-            <h3>Python</h3>
-            <p>I use Python for scripting, automation, and data analysis with libraries like Pandas and NumPy.</p>
-        </div>
-        <div class="card">
-            <img src="./static/images/lang_logo/crab.png" alt="Rust Logo" class="logo">
-            <h3>Rust</h3>
-            <p>I leverage Rust to build performant and memory-safe applications with a focus on systems programming.</p>
-        </div>
+  </div>
+  <div class="slide-three">
+    <div class="slide-three-content">
+      <h1 class="gradient-text">Your Gateway to My Projects</h1>
+      <p class="slide-text">
+        This site began as a personal portfolio and has grown into a dynamic
+        GitHub profile viewer. By using the GitHub API, it automatically
+        displays the README files of my projects, giving a clear view of the
+        work I’ve done and the skills I bring to the table.
+      </p>
+      <p class="slide-text">
+        It also lets you explore other GitHub profiles—just type a username into
+        the search bar to see their repositories and project READMEs. When
+        profiles are well-documented, the experience is even better, making it
+        easy to dive into their work.
+      </p>
+      <p class="slide-text">
+        This project reflects my commitment to improving as a developer and my
+        interest in showcasing the work of others in the open-source community.
+        My aim is to provide a useful tool while also demonstrating my technical
+        skills to senior developers and recruiters.
+      </p>
+      <p class="slide-highlight" style="justify-self: center">
+        Start exploring and see what the open-source world has to offer!
+      </p>
+      <div class="button-slide-three">
+        <button
+          hx-get="/projects"
+          hx-swap="innerHTML"
+          hx-target="#content"
+          hx-push-url="projects"
+        >
+          My Projects
+        </button>
+        <button
+          hx-get="/browse"
+          hx-swap="innerHTML"
+          hx-target="#content"
+          hx-push-url="browse"
+        >
+          Browse Profiles
+        </button>
+      </div>
     </div>
-    <div class="first">
-        <p>golang</p>
-        <p>typescript</p>
-        <p>python</p>
-        <p>rust</p>
+    <img src="./static/images/dev-illustration.jpg" />
+  </div>
+  <div class="slide-three" style="background-color: rgb(14, 14, 14)">
+    <img src="./static/images/thomas.png" />
+    <div class="slide-three-content">
+      <h1 class="gradient-text">A Little About Me</h1>
+      <p class="slide-text">
+        Hi, I'm Thomas Grangeon, a developer passionate about technology and
+        coding. With a diverse background in software development, I've had the
+        opportunity to work on various projects, ranging from CLI tools in Go to
+        dynamic websites and open-source applications.
+      </p>
+      <p class="slide-text">
+        I love solving problems and exploring new technologies. Whether it's
+        working on my GitHub projects or collaborating with the open-source
+        community, I'm always seeking opportunities to learn and challenge
+        myself.
+      </p>
+      <p class="slide-text">
+        My goal is to deliver high-quality solutions while continuing to grow
+        and expand my skills. Outside of development, I strive to maintain a
+        balanced lifestyle, including fitness, which I believe enhances my
+        productivity and focus.
+      </p>
     </div>
-    <div class="second">
-        <h1>More about me:</h1>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae facere ea impedit tenetur quis itaque voluptate, molestiae quia praesentium minima quos! Velit, inventore? Iusto ipsam ad iure velit suscipit minima.</p>
-    </div>
+  </div>
 </html>
 <style>
-    .first {
-        display: flex;
-        height: 100vh;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        h1 {
-          margin: 2px !important;
-          font-size: 8vh;
-          background: linear-gradient(to right, hsl(51, 100%, 62%), hsl(204 100% 59%));
-          background: linear-gradient(
-            to right in oklch,
-            hsl(51, 100%, 62%),
-            hsl(314, 100%, 59%)
-          );
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          color: transparent;
-        }
-        h3 {
-          margin: 2px !important;
-          font-size: 4vh;
-          margin-left: 2vw !important;
-        }
-      }
-      
-      .second{
-        display: flex;
-        overflow: visible !important;
-        height: 110vh;
-        z-index: -1;
-        width: 100vw;
-        flex-direction: row;
-        color: aliceblue;
-        justify-content: center;
-        align-items: center;
-        background-color: rgb(14, 14, 14);
-        position: relative;
-      }
 
-      .card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 10px;
-        justify-content: center;
-        background-color: #1e1e1e;
-        border: 1px solid #333;
-        border-radius: 10px;
-        padding: 20px;
-        width: 16vw;
-        height: 40vh;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+  .transparent-slide{
+    height: 100vh;
+    background: transparent;
+    width: 100vw;
+  }
 
-    .card:hover{
-        scale: 2;
+  .dark-slide{
+    height: auto;
+    background: rgb(14, 14, 14);
+    width: 100vw;
+  }
+
+  .home-slide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      margin: 2px !important;
+      font-size: 8vh;
     }
-    
-    .logo {
-        width: 8vw;
-        height: 3vh;
-        height: auto;
-        margin-bottom: 15px;
-    }
-    
     h3 {
-        font-size: 2.5vh;
-        margin: 10px 0;
-        color: aliceblue;
+      margin: 2px !important;
+      font-size: 4vh;
+      margin-left: 2vw !important;
     }
-    
+  }
+
+  .card-slide {
+    display: flex;
+    height: 80vh;
+    width: 100vw;
+    flex-direction: column;
+    color: aliceblue;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    justify-content: center;
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+    width: 16vw;
+    height: 40vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
     p {
-        color: #aaa;
-        font-size: 1.8vh;
-        line-height: 1.5;
+      color: #aaa;
+      font-size: 1.8vh;
+      line-height: 1.5;
     }
-      
+  }
+
+
+  .logo {
+    width: 8vw;
+    height: 3vh;
+    height: auto;
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    font-size: 2.5vh;
+    margin: 10px 0;
+    color: aliceblue;
+  }
+
+  .slide-three-content {
+    max-width: 40vw;
+    border-radius: 12px;
+  }
+
+  .slide-three {
+    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    overflow: hidden;
+    font-size: 1.8vh;
+    margin-top: 2vh;
+    img {
+      height: 55vh;
+      width: 16vw;
+      object-fit: cover;
+      border-radius: 30px;
+      margin-left: 2vw;
+      margin-right: 2vw;
+    }
+  }
+
+  .slide-text {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .slide-highlight {
+    font-weight: bold;
+    color: #ff5280;
+  }
+
+  .button-slide-three {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    button {
+      margin: 5px;
+      padding: 1vh;
+      font-size: 24px;
+      border-radius: 20px;
+      border: solid 2px #fff;
+      color: #fff;
+      background-color: transparent;
+    }
+    button:hover {
+      border: solid 2px #fff;
+      color: #ff5280;
+      background-color: #fff;
+    }
+  }
 </style>

@@ -39,7 +39,7 @@ var contactTemplateSubmitted = `
 `
 
 var contactTemplateFalse = `
-<h1>Contact Me</h1>
+<h1 class="gradient-text">Contact Me</h1>
 <p class="contactError"> Something went wrong please try again !</p>
 <form id="contactForm" class="contactForm" hx-post="/submit" hx-swap="innerHTML" hx-target="#content">
 	<label for="name">Name:</label>

@@ -2,6 +2,7 @@ html {
   background-color: #101010;
   color: #f8f8f8;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   * {
     font-weight: 700;
@@ -13,7 +14,7 @@ body {
   display: flex;
   flex-direction: row;
   font-size: 1.5vh;
-  height: 100vh;
+  height: 100%;
   width: 99vw;
   overflow-y: hidden;
 }
@@ -25,6 +26,18 @@ video {
   min-width: 100%;
   min-height: 100%;
   z-index: -1;
+}
+
+.gradient-text {
+  background: linear-gradient(
+    to right in oklch,
+    hsl(51, 100%, 62%),
+    hsl(314, 100%, 59%)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .side-menu {
@@ -82,7 +95,7 @@ video {
   position: absolute;
   top: 0;
   left: 0;
-  height: 99vh;
+  height: 100vh;
   width: 100vw;
   flex-direction: column;
   align-items: center;
