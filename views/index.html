@@ -17,7 +17,7 @@
       integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp"
       crossorigin="anonymous"
     ></script>
-  </head>
+  </head> 
   <body>
     <video autoplay muted loop id="myVideo">
       <source src="./static/background.mp4" type="video/mp4" />
@@ -32,7 +32,7 @@
             hx-target="#content"
             hx-push-url="home"
           >
-            <img src="../static/images/home.png" />
+            <img src="../static/images/home.png"/>
             <div class="text">Home</div>
           </button>
         </li>
@@ -44,7 +44,7 @@
             hx-target="#content"
             hx-push-url="browse"
           >
-            <img src="../static/images/browse.png" />
+            <img src="../static/images/github-white.png" />
             <div class="text">Browse</div>
           </button>
         </li>
@@ -158,7 +158,6 @@
       }
     }
   }
-  
 
   document.addEventListener('DOMContentLoaded', hideHeader);
   document.body.addEventListener("htmx:afterSettle", hideHeader);

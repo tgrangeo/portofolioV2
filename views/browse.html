@@ -1,8 +1,13 @@
 <div class="browse">
-  <h1 class="cursor typewriter-animation">
-    Welcome to My Portfolio and GitHub Explorer
+  <h1 class="cursor typewriter-animation gradient-text">
+    Github Profile Viewer
   </h1>
-  <p style="backdrop-filter: blur(5px)">
+  <div style="backdrop-filter: blur(5px)" class="search-box">
+    <input id="searchInput" type="text" placeholder="Type a github pseudo..." />
+    <button id="searchButton" class="search-button" type="button">Find</button>
+  </div>
+  <p id="404" style="color: red; display: none">account not found</p>
+  <p >
     This site serves as both my personal portfolio and a dynamic GitHub profile
     viewer. Explore my global README to learn about me, or dive into individual
     project READMEs to see my work in detail.<br /><br />
@@ -11,18 +16,15 @@
     Start your journey now and discover the open-source world at your
     fingertips!<br />
   </p>
-  <p class=".gradient-text" id="404" style="color: red; display: none">
-    account not found
-  </p>
-  <div style="backdrop-filter: blur(5px)" class="search-box">
-    <input id="searchInput" type="text" placeholder="Type a github pseudo..." />
-    <button id="searchButton" class="search-button" type="button">Find</button>
-  </div>
-  <p style="backdrop-filter: blur(5px)">
+  <p style="color: #ff5280;">
     By default you are on my profile take a look at my projects and about 😊
   </p>
 </div>
 <script>
+  let username = "tgrangeo"
+
+
+
   document.getElementById("searchButton").addEventListener("click", submit);
   document
     .getElementById("searchInput")
@@ -55,49 +57,53 @@
   .browse {
     display: flex;
     flex-direction: column;
-    max-width: 60vw;
-    margin-left: 15vw;
+    max-width: 50vw;
     align-items: center;
     justify-content: center;
+  }
+  p {
+    backdrop-filter: blur(5px);
+    font-size: 2vh;
   }
 
   .search-box {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin: 20px;
   }
 
   input[type="text"] {
-    width: 500px;
-    padding: 10px 15px;
-    font-size: 1.2em;
+    width: 40vw;
+    height: 5vh;
+    padding: 10px 50px;
+    font-size: 1.8em;
     border: 2px solid #ccc;
-    border-radius: 15px 0 0 15px;
+    border-radius: 50px 0 0 50px;
     outline: none;
   }
 
   .search-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    border: 2px solid #28a745;
+    padding: 10px 40px;
+    font-size: 1.8em;
+    border: 2px solid #fb1854;
     border-left: none;
-    background-color: #28a745;
+    background-color: #ff5280;
     color: #fff;
-    border-radius: 0 15px 15px 0;
+    border-radius: 0 50px 50px 0;
     cursor: pointer;
     outline: none;
   }
 
   .search-button:hover {
-    background-color: #218838;
+    background-color: #fb1854;
   }
 
   .me-button {
     padding: 10px 20px;
     font-size: 1.2em;
-    border: 2px solid #28a745;
+    border: 2px solid #fb1854;
     border-left: none;
-    background-color: #28a745;
+    background-color: #ff5280;
     color: #fff;
     border-radius: 15px;
     cursor: pointer;
@@ -105,7 +111,7 @@
   }
 
   .me-button:hover {
-    background-color: #218838;
+    background-color: #fb1854;
   }
 
   .gradient-text {
@@ -128,7 +134,7 @@
     width: 24em;
     margin: 0 auto;
     border-right: 2px solid rgba(255, 255, 255, 0.75);
-    font-size: 4.8vw;
+    font-size: 4vw;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -145,7 +151,7 @@
       width: 0;
     }
     to {
-      width: 90%;
+      width: 80%;
     }
   }
   @keyframes blinkingCursor {
